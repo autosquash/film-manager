@@ -4,7 +4,7 @@ import './App.css'
 
 interface Movie {
   title: string
-  view_date: string
+  view_date?: string | null
 }
 
 const colors = [
@@ -16,6 +16,13 @@ const colors = [
   'LightSeaGreen',
 ]
 
+const parseViewDate = (viewDate: string | null | undefined) => {
+  if (!viewDate || viewDate === 'unknown') {
+    return ''
+  }
+  return `(vista el ${viewDate!.split('-').reverse().join('-')})`
+}
+
 export default function App() {
   const [movies, setMovies] = useState<Movie[]>([])
 
@@ -26,10 +33,7 @@ export default function App() {
     })
   }, [])
 
-  const getViewDateString = (movie: Movie) =>
-    !movie.view_date || movie.view_date === 'unknown'
-      ? ''
-      : `(vista el ${movie.view_date.split('-').reverse().join('-')})`
+  const getViewDateString = (movie: Movie) => parseViewDate(movie.view_date)
 
   return (
     <div className="container">
