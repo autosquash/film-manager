@@ -8,13 +8,14 @@ use tauri::command;
 struct Movie {
     title: String,
     view_date: String,
+    image_url: Option<String>,
 }
 
 #[command]
 fn get_movies() -> Vec<Movie> {
     let path = PathBuf::from("../data/movies.json");
     let data = fs::read_to_string(path).unwrap_or("[]".to_string());
-    println!("{:#?}", data);
+    // println!("{:#?}", data);
     serde_json::from_str(&data).unwrap_or_else(|_| vec![])
 }
 
