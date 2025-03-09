@@ -4,8 +4,7 @@ import './App.css'
 
 interface Movie {
   title: string
-  year: number
-  genre: string
+  view_date: string
 }
 
 export default function App() {
@@ -20,11 +19,14 @@ export default function App() {
 
   return (
     <div className="container">
-      <h1>Listado de Películas</h1>
+      <h1> Listado de Películas</h1>
       <ul>
         {movies.map((movie, index) => (
           <li key={index}>
-            <strong>{movie.title}</strong> ({movie.year}) - {movie.genre}
+            <strong>{movie.title}</strong>{' '}
+            {['unknown', '', undefined, null].includes(movie.view_date)
+              ? ''
+              : `(vista el ${movie.view_date.split('-').reverse().join('-')})`}
           </li>
         ))}
       </ul>
