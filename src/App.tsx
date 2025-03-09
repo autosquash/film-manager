@@ -5,6 +5,7 @@ import './App.css'
 interface Movie {
   title: string
   view_date?: string | null
+  image_url?: string | null
 }
 
 const colors = [
@@ -48,6 +49,13 @@ export default function App() {
               <span>
                 <strong>{movie.title}</strong> {getViewDateString(movie)}
               </span>
+              {movie.image_url && (
+                <img
+                  src={`data/${movie.image_url}`}
+                  alt={movie.title}
+                  className="movie-thumbnail"
+                />
+              )}
             </div>
           </li>
         ))}
