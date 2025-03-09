@@ -9,9 +9,9 @@ interface Movie {
 
 const colors = [
   'orange',
-  'purple',
-  'green',
-  'SaddleBrown',
+  'MediumOrchid',
+  'LawnGreen',
+  'Peru',
   'coral',
   'LightSeaGreen',
 ]
@@ -40,8 +40,11 @@ export default function App() {
       <h1> Listado de Películas</h1>
       <ul>
         {movies.map((movie, index) => (
-          <li key={index}>
-            <span style={{ color: colors[index % colors.length] }}>
+          <li
+            key={index}
+            style={{ backgroundColor: colors[index % colors.length] }}
+          >
+            <span>
               <strong>{movie.title}</strong> {getViewDateString(movie)}
             </span>
           </li>
