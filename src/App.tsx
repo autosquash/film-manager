@@ -37,16 +37,18 @@ export default function App() {
 
   return (
     <div className="container">
-      <h1> Listado de Películas</h1>
+      <h1>Ya hemos visto como mínimo {movies.length} películas</h1>
       <ul>
         {movies.map((movie, index) => (
-          <li
-            key={index}
-            style={{ backgroundColor: colors[index % colors.length] }}
-          >
-            <span>
-              <strong>{movie.title}</strong> {getViewDateString(movie)}
-            </span>
+          <li key={index}>
+            <div
+              className="movie-card"
+              style={{ backgroundColor: colors[index % colors.length] }}
+            >
+              <span>
+                <strong>{movie.title}</strong> {getViewDateString(movie)}
+              </span>
+            </div>
           </li>
         ))}
       </ul>
