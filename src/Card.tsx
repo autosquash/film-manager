@@ -1,3 +1,5 @@
+import { useState } from 'react'
+
 export interface Movie {
   title: string
   view_date?: string | null
@@ -10,6 +12,7 @@ interface Props {
 }
 
 export default function Card({ movie, color }: Props) {
+  const [open, setOpen] = useState(false)
   const parseViewDate = (viewDate: string | null | undefined) => {
     if (!viewDate || viewDate === 'unknown') {
       return ''
@@ -18,17 +21,28 @@ export default function Card({ movie, color }: Props) {
   }
   const getViewDateString = (movie: Movie) => parseViewDate(movie.view_date)
   return (
-    <div className="movie-card" style={{ backgroundColor: color }}>
+    <div
+      className="movie-card"
+      style={{
+        backgroundColor: color,
+        cursor: movie.image_url ? 'pointer' : 'default',
+      }}
+      onClick={() => setOpen(!open)}
+    >
       <span>
         <strong>{movie.title}</strong> {getViewDateString(movie)}
       </span>
-      {movie.image_url && (
-        <img
-          src={`data/${movie.image_url}`}
-          alt={movie.title}
-          className="movie-thumbnail"
-        />
-      )}
+      {open ? (
+        <div>
+          {movie.image_url && (
+            <img
+              src={`data/${movie.image_url}`}
+              alt={movie.title}
+              className="movie-thumbnail"
+            />
+          )}
+        </div>
+      ) : null}
     </div>
   )
 }
