@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import './Card.css'
 
 export interface Movie {
   title: string
@@ -22,9 +23,10 @@ export default function Card({ movie, color }: Props) {
   const getViewDateString = (movie: Movie) => parseViewDate(movie.view_date)
   return (
     <div
-      className="movie-card"
+      className={`movie-card ${movie.image_url ? 'movie-card-expandable' : ''}`}
       style={{
-        backgroundColor: color,
+        // @ts-expect-error
+        '--background-color': color,
         cursor: movie.image_url ? 'pointer' : 'default',
       }}
       onClick={() => setOpen(!open)}
