@@ -25,7 +25,7 @@ ul {
 
 .movie-thumbnail {
   width: auto;
-  height: 60px;
-  margin-right: 10px;
+  height: 120px;
+  margin-top: 12px;
   border-radius: 5px;
 }
