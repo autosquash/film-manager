@@ -18,8 +18,19 @@ fn get_movies() -> Vec<Movie> {
     let path = PathBuf::from("../data/movies.json");
     let data = fs::read_to_string(path).unwrap_or("[]".to_string());
     let movies = serde_json::from_str(&data).unwrap_or_else(|_| vec![]);
-    println!("{:#?}", movies);
-    movies
+    let new_movies = movies
+        .into_iter()
+        .map(|movie: Movie| match movie.id {
+            Some(_) => movie,
+            None => Movie {
+                title: movie.title,
+                view_date: movie.view_date,
+                image_url: movie.image_url,
+                id: Some(Uuid::new_v4()),
+            },
+        })
+        .collect();
+    new_movies
 }
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
