@@ -18,7 +18,6 @@ export default function App() {
 
   useEffect(() => {
     invoke<Movie[]>('get_movies').then((fetchedMovies) => {
-      // console.log(fetchedMovies)
       setMovies(fetchedMovies)
     })
   }, [])
@@ -30,7 +29,7 @@ export default function App() {
       </h1>
       <ul className={styles.moviesList}>
         {movies.map((movie, index) => (
-          <li key={index}>
+          <li key={movie.id}>
             <Card movie={movie} color={colors[index % colors.length]} />
           </li>
         ))}
