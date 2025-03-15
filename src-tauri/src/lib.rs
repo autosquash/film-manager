@@ -1,6 +1,10 @@
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
 use serde::{Deserialize, Serialize};
-use std::{fs, path::PathBuf};
+use serde_json::to_writer_pretty;
+use std::{
+    fs::{self, File},
+    path::PathBuf,
+};
 use tauri::command;
 use uuid::Uuid;
 
@@ -29,11 +33,19 @@ fn get_movies() -> Vec<Movie> {
     data.movies
 }
 
+#[command]
+fn save_movies(movies: Vec<Movie>) {
+    let data = Data { movies };
+    let file = File::create(DATA_PATH).unwrap();
+    to_writer_pretty(file, &data).unwrap()
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
-        .invoke_handler(tauri::generate_handler![get_movies])
+        .invoke_handler(tauri::generate_handler![get_movies, save_movies])
+        // .invoke_handler(tauri::generate_handler![save_movies])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
