@@ -1,7 +1,7 @@
 import { invoke } from '@tauri-apps/api/core'
 import { useEffect, useState } from 'react'
-import './App.css'
 import Card, { Movie } from './Card'
+import './css/App.css'
 
 const colors = [
   'orange',
