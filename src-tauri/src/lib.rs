@@ -1,8 +1,6 @@
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
 use serde::{Deserialize, Serialize};
-use serde_json::to_writer_pretty;
-use std::fs::{self, File};
-use std::path::PathBuf;
+use std::{fs, path::PathBuf};
 use tauri::command;
 use uuid::Uuid;
 
@@ -13,7 +11,7 @@ struct Movie {
     premiere_date: Option<String>,
     movie_url: Option<String>,
     image_url: Option<String>,
-    id: Option<Uuid>,
+    id: Uuid,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -27,39 +25,7 @@ const DATA_PATH: &str = "../data/movies.json";
 fn get_movies() -> Vec<Movie> {
     let path = PathBuf::from(DATA_PATH);
     let data = fs::read_to_string(path).unwrap();
-    let movies_result: Result<Vec<Movie>, serde_json::Error> = serde_json::from_str(&data);
-    let movies: Vec<Movie> = match movies_result {
-        Ok(_) => movies_result.unwrap(),
-        Err(_) => {
-            let data: Data = serde_json::from_str(&data).unwrap();
-            data.movies
-        }
-    };
-
-    if movies.len() == 0 {
-        return vec![];
-    }
-
-    let new_movies = movies
-        .into_iter()
-        .map(|movie: Movie| match movie.id {
-            Some(_) => movie,
-            None => Movie {
-                title: movie.title,
-                view_date: movie.view_date,
-                premiere_date: movie.premiere_date,
-                movie_url: movie.movie_url,
-                image_url: movie.image_url,
-                id: Some(Uuid::new_v4()),
-            },
-        })
-        .collect();
-
-    let data = Data { movies: new_movies };
-
-    let file = File::create(DATA_PATH).unwrap();
-    to_writer_pretty(file, &data).unwrap();
-
+    let data: Data = serde_json::from_str(&data).unwrap();
     data.movies
 }
 
