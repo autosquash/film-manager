@@ -5,27 +5,3 @@ body {
 #root {
   background-color: wheat;
 }
-
-.container {
-  max-width: 600px;
-  margin: auto;
-  padding: 20px;
-  font-family: Arial, sans-serif;
-  text-align: center;
-}
-
-h1 {
-  color: #333;
-}
-
-ul {
-  list-style: none;
-  padding: 0;
-}
-
-.movie-thumbnail {
-  width: auto;
-  height: 120px;
-  margin-top: 12px;
-  border-radius: 5px;
-}

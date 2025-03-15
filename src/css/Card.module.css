@@ -12,3 +12,10 @@
     opacity: 0.9;
     outline: 2px solid var(--background-color);
 }
+
+.movie-thumbnail {
+    width: auto;
+    height: 120px;
+    margin-top: 12px;
+    border-radius: 5px;
+}
