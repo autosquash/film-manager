@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
+import styles from '../css/MovieForm.module.css'
 import { Movie } from './Card'
-import styles from './css/MovieForm.module.css'
 
 interface MovieFormProps {
   onSubmit: (newMovie: Movie) => void
