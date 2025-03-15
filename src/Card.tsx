@@ -21,16 +21,19 @@ export default function Card({ movie, color }: Props) {
     return `(vista el ${viewDate!.split('-').reverse().join('-')})`
   }
   const getViewDateString = (movie: Movie) => parseViewDate(movie.view_date)
+
+  const isExpandable = Boolean(movie.image_url)
+  const cardClassNames = `${styles.movieCard} ${
+    isExpandable ? styles.movieCardExpandable : ''
+  }`
+  const cardStyle = {
+    '--background-color': color,
+    cursor: isExpandable ? 'pointer' : 'default',
+  }
   return (
     <div
-      className={`${styles.movieCard} ${
-        movie.image_url ? styles.movieCardExpandable : ''
-      }`}
-      style={{
-        // @ts-expect-error
-        '--background-color': color,
-        cursor: movie.image_url ? 'pointer' : 'default',
-      }}
+      className={cardClassNames}
+      style={cardStyle}
       onClick={() => setOpen(!open)}
     >
       <span>
