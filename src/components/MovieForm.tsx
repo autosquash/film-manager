@@ -8,10 +8,14 @@ interface MovieFormProps {
   close: () => void
 }
 
+const createInitialMovieState = () => ({
+  title: '',
+  view_date: '',
+  premiere_date: '',
+})
+
 const MovieForm: React.FC<MovieFormProps> = ({ onSubmit, close }) => {
-  const [title, setTitle] = useState('')
-  const [view_date, setView_date] = useState('')
-  const [premiere_date, setPremiere_date] = useState('')
+  const [movie, setMovie] = useState(createInitialMovieState())
   const [titleError, setTitleError] = useState('')
   const [dateError, setDateError] = useState('')
 
@@ -20,32 +24,34 @@ const MovieForm: React.FC<MovieFormProps> = ({ onSubmit, close }) => {
   }
 
   useEffect(() => {
-    if (!validateDate(view_date) || !validateDate(premiere_date)) {
+    if (!validateDate(movie.view_date) || !validateDate(movie.premiere_date)) {
       setDateError('Las fechas deben tener el formato dd-mm-YY.')
     } else {
       setDateError('')
     }
-  }, [view_date, premiere_date])
+  }, [movie.view_date, movie.premiere_date])
 
   useEffect(() => {
     if (titleError) {
       setTitleError('')
     }
-  }, [title])
+  }, [movie.title])
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setMovie({ ...movie, [e.target.name]: e.target.value })
+  }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    if (!title.trim()) {
+    if (!movie.title.trim()) {
       setTitleError('El título es obligatorio.')
       return
     }
     if (dateError) {
       return
     }
-    onSubmit({ title, view_date, premiere_date, id: uuidv4() })
-    setTitle('')
-    setView_date('')
-    setPremiere_date('')
+    onSubmit({ ...movie, id: uuidv4() })
+    setMovie(createInitialMovieState())
   }
 
   const errorToDisplay = titleError || dateError
@@ -56,8 +62,9 @@ const MovieForm: React.FC<MovieFormProps> = ({ onSubmit, close }) => {
         <label>Título:</label>
         <input
           type="text"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
+          name="title"
+          value={movie.title}
+          onChange={handleChange}
           required
         />
       </div>
@@ -65,16 +72,18 @@ const MovieForm: React.FC<MovieFormProps> = ({ onSubmit, close }) => {
         <label>Fecha de visionado (dd-mm-YY):</label>
         <input
           type="text"
-          value={view_date}
-          onChange={(e) => setView_date(e.target.value)}
+          name="view_date"
+          value={movie.view_date}
+          onChange={handleChange}
         />
       </div>
       <div className={styles.field}>
         <label>Fecha de estreno (dd-mm-YY):</label>
         <input
           type="text"
-          value={premiere_date}
-          onChange={(e) => setPremiere_date(e.target.value)}
+          name="premiere_date"
+          value={movie.premiere_date}
+          onChange={handleChange}
         />
       </div>
       {errorToDisplay && <p className={styles.error}>{errorToDisplay}</p>}
