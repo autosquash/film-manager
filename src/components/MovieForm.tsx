@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import styles from '../css/MovieForm.module.css'
 import { Movie } from './Card'
@@ -12,28 +12,43 @@ const MovieForm: React.FC<MovieFormProps> = ({ onSubmit, close }) => {
   const [title, setTitle] = useState('')
   const [view_date, setView_date] = useState('')
   const [premiere_date, setPremiere_date] = useState('')
-  const [error, setError] = useState('')
+  const [titleError, setTitleError] = useState('')
+  const [dateError, setDateError] = useState('')
 
   const validateDate = (date: string) => {
-    return date === '' || /^\d{2}-\d{2}-\d{2}$/.test(date)
+    return date === '' || /^\d{1,2}-\d{1,2}-\d{2}$/.test(date)
   }
+
+  useEffect(() => {
+    if (!validateDate(view_date) || !validateDate(premiere_date)) {
+      setDateError('Las fechas deben tener el formato dd-mm-YY.')
+    } else {
+      setDateError('')
+    }
+  }, [view_date, premiere_date])
+
+  useEffect(() => {
+    if (titleError) {
+      setTitleError('')
+    }
+  }, [title])
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (!title.trim()) {
-      setError('El título es obligatorio.')
+      setTitleError('El título es obligatorio.')
       return
     }
-    if (!validateDate(view_date) || !validateDate(premiere_date)) {
-      setError('Las fechas deben tener el formato dd-mm-YY.')
+    if (dateError) {
       return
     }
-    setError('')
     onSubmit({ title, view_date, premiere_date, id: uuidv4() })
     setTitle('')
     setView_date('')
     setPremiere_date('')
   }
+
+  const errorToDisplay = titleError || dateError
 
   return (
     <form className={styles.form} onSubmit={handleSubmit}>
@@ -62,7 +77,7 @@ const MovieForm: React.FC<MovieFormProps> = ({ onSubmit, close }) => {
           onChange={(e) => setPremiere_date(e.target.value)}
         />
       </div>
-      {error && <p className={styles.error}>{error}</p>}
+      {errorToDisplay && <p className={styles.error}>{errorToDisplay}</p>}
       <button type="submit">Agregar película</button>
       <button onClick={close} style={{ backgroundColor: 'darkred' }}>
         Cancelar
