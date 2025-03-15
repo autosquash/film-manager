@@ -5,6 +5,7 @@ export interface Movie {
   title: string
   view_date?: string | null
   image_url?: string | null
+  id: string
 }
 
 interface Props {
