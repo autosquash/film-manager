@@ -7,6 +7,15 @@ interface Movie {
   view_date: string
 }
 
+const colors = [
+  'orange',
+  'purple',
+  'green',
+  'SaddleBrown',
+  'coral',
+  'LightSeaGreen',
+]
+
 export default function App() {
   const [movies, setMovies] = useState<Movie[]>([])
 
@@ -17,16 +26,20 @@ export default function App() {
     })
   }, [])
 
+  const getViewDateString = (movie: Movie) =>
+    !movie.view_date || movie.view_date === 'unknown'
+      ? ''
+      : `(vista el ${movie.view_date.split('-').reverse().join('-')})`
+
   return (
     <div className="container">
       <h1> Listado de Películas</h1>
       <ul>
         {movies.map((movie, index) => (
           <li key={index}>
-            <strong>{movie.title}</strong>{' '}
-            {['unknown', '', undefined, null].includes(movie.view_date)
-              ? ''
-              : `(vista el ${movie.view_date.split('-').reverse().join('-')})`}
+            <span style={{ color: colors[index % colors.length] }}>
+              <strong>{movie.title}</strong> {getViewDateString(movie)}
+            </span>
           </li>
         ))}
       </ul>
