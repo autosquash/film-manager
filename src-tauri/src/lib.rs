@@ -21,11 +21,11 @@ struct Data {
     movies: Vec<Movie>,
 }
 
-const PATH: &str = "../data/movies.json";
+const DATA_PATH: &str = "../data/movies.json";
 
 #[command]
 fn get_movies() -> Vec<Movie> {
-    let path = PathBuf::from(PATH);
+    let path = PathBuf::from(DATA_PATH);
     let data = fs::read_to_string(path).unwrap();
     let movies_result: Result<Vec<Movie>, serde_json::Error> = serde_json::from_str(&data);
     let movies: Vec<Movie> = match movies_result {
@@ -57,10 +57,7 @@ fn get_movies() -> Vec<Movie> {
 
     let data = Data { movies: new_movies };
 
-    let json = serde_json::to_string_pretty(&data).unwrap();
-    println!("{}", json);
-
-    let file = File::create("../data/movies-output.json").unwrap();
+    let file = File::create(DATA_PATH).unwrap();
     to_writer_pretty(file, &data).unwrap();
 
     data.movies
