@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import './css/Card.css'
+import styles from './css/Card.module.css'
 
 export interface Movie {
   title: string
@@ -23,7 +23,9 @@ export default function Card({ movie, color }: Props) {
   const getViewDateString = (movie: Movie) => parseViewDate(movie.view_date)
   return (
     <div
-      className={`movie-card ${movie.image_url ? 'movie-card-expandable' : ''}`}
+      className={`${styles.movieCard} ${
+        movie.image_url ? styles.movieCardExpandable : ''
+      }`}
       style={{
         // @ts-expect-error
         '--background-color': color,
@@ -40,7 +42,7 @@ export default function Card({ movie, color }: Props) {
             <img
               src={`data/${movie.image_url}`}
               alt={movie.title}
-              className="movie-thumbnail"
+              className={styles.movieThumbnail}
             />
           )}
         </div>

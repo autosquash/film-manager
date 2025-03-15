@@ -1,0 +1,16 @@
+.container {
+  max-width: 600px;
+  margin: auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  text-align: center;
+}
+
+.title {
+  color: black;
+}
+
+.movies-list {
+  list-style: none;
+  padding: 0;
+}
