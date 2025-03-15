@@ -3,20 +3,23 @@ use serde::{Deserialize, Serialize};
 use std::fs;
 use std::path::PathBuf;
 use tauri::command;
+use uuid::Uuid;
 
 #[derive(Serialize, Deserialize, Debug)]
 struct Movie {
     title: String,
     view_date: String,
     image_url: Option<String>,
+    id: Option<Uuid>,
 }
 
 #[command]
 fn get_movies() -> Vec<Movie> {
     let path = PathBuf::from("../data/movies.json");
     let data = fs::read_to_string(path).unwrap_or("[]".to_string());
-    // println!("{:#?}", data);
-    serde_json::from_str(&data).unwrap_or_else(|_| vec![])
+    let movies = serde_json::from_str(&data).unwrap_or_else(|_| vec![]);
+    println!("{:#?}", movies);
+    movies
 }
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
