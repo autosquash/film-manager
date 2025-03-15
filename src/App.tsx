@@ -18,7 +18,7 @@ export default function App() {
 
   useEffect(() => {
     invoke<Movie[]>('get_movies').then((fetchedMovies) => {
-      console.log(fetchedMovies)
+      // console.log(fetchedMovies)
       setMovies(fetchedMovies)
     })
   }, [])
