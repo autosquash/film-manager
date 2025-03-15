@@ -14,15 +14,10 @@ interface Props {
 
 export default function Card({ movie, color }: Props) {
   const [open, setOpen] = useState(false)
-  const parseViewDate = (viewDate: string | null | undefined) => {
-    if (!viewDate || viewDate === 'unknown') {
-      return ''
-    }
-    return `(vista el ${viewDate!.split('-').reverse().join('-')})`
-  }
-  const getViewDateString = (movie: Movie) => parseViewDate(movie.view_date)
 
-  const isExpandable = Boolean(movie.image_url)
+  const viewDateString = parseViewDate(movie.view_date)
+
+  const isExpandable = Boolean(movie.image_url || viewDateString)
   const cardClassNames = `${styles.movieCard} ${
     isExpandable ? styles.movieCardExpandable : ''
   }`
@@ -34,22 +29,49 @@ export default function Card({ movie, color }: Props) {
     <div
       className={cardClassNames}
       style={cardStyle}
-      onClick={() => setOpen(!open)}
+      onClick={isExpandable ? () => setOpen(!open) : undefined}
     >
       <span>
-        <strong>{movie.title}</strong> {getViewDateString(movie)}
+        <strong>{movie.title}</strong>
       </span>
       {open ? (
-        <div>
-          {movie.image_url && (
-            <img
-              src={`data/${movie.image_url}`}
-              alt={movie.title}
-              className={styles.movieThumbnail}
-            />
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            padding: '0 24px',
+            fontSize: '14px',
+            userSelect: 'none',
+          }}
+        >
+          <>
+            {movie.image_url ? (
+              <img
+                src={`data/${movie.image_url}`}
+                alt={movie.title}
+                className={styles.movieThumbnail}
+              />
+            ) : (
+              <p>
+                <em>Imagen no disponible</em>
+              </p>
+            )}
+          </>
+          {viewDateString && (
+            <p>
+              <strong>Vista: </strong>
+              {viewDateString}
+            </p>
           )}
         </div>
       ) : null}
     </div>
   )
+}
+
+const parseViewDate = (viewDate: string | null | undefined): string => {
+  if (!viewDate || viewDate === 'unknown') {
+    return ''
+  }
+  return viewDate!.split('-').reverse().join('-')
 }
