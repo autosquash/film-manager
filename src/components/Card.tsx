@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import styles from './css/Card.module.css'
+import styles from '../css/Card.module.css'
 
 export interface Movie {
   title: string
