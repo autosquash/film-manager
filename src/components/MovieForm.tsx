@@ -10,9 +10,43 @@ interface MovieFormProps {
 
 const createInitialMovieState = () => ({
   title: '',
-  view_date: '',
-  premiere_date: '',
+  viewDate: '',
+  premiereDate: '',
 })
+
+function normalizeDate(date: string): string | null {
+  if (!date) {
+    return null
+  }
+  const items = date.split('-')
+  if (items.length !== 3) {
+    throw new Error('Wrong length')
+  }
+  let [day, month, year] = date
+  if (year.length == 2) {
+    year = '20' + year
+  }
+  if (year.length !== 4) {
+    throw new Error('Wrong length of year string')
+  }
+  if (day.length === 1) {
+    day = '0' + day
+  }
+  if (month.length === 1) {
+    month = '0' + month
+  }
+
+  if (day.length !== 2) {
+    throw new Error('Wrong length of day string')
+  }
+  if (month.length !== 2) {
+    throw new Error('Wrong length of month string')
+  }
+  if (parseInt(day) > 31 || parseInt(month) > 12) {
+    throw new Error('Invalid value for date')
+  }
+  return [year, month, day].join('-')
+}
 
 const MovieForm: React.FC<MovieFormProps> = ({ onSubmit, close }) => {
   const [movie, setMovie] = useState(createInitialMovieState())
@@ -20,16 +54,16 @@ const MovieForm: React.FC<MovieFormProps> = ({ onSubmit, close }) => {
   const [dateError, setDateError] = useState('')
 
   const validateDate = (date: string) => {
-    return date === '' || /^\d{1,2}-\d{1,2}-\d{2}$/.test(date)
+    return date === '' || /^\d{1,2}-\d{1,2}-\d{2,4}$/.test(date)
   }
 
   useEffect(() => {
-    if (!validateDate(movie.view_date) || !validateDate(movie.premiere_date)) {
+    if (!validateDate(movie.viewDate) || !validateDate(movie.premiereDate)) {
       setDateError('Las fechas deben tener el formato dd-mm-YY.')
     } else {
       setDateError('')
     }
-  }, [movie.view_date, movie.premiere_date])
+  }, [movie.viewDate, movie.premiereDate])
 
   useEffect(() => {
     if (titleError) {
@@ -38,7 +72,9 @@ const MovieForm: React.FC<MovieFormProps> = ({ onSubmit, close }) => {
   }, [movie.title])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setMovie({ ...movie, [e.target.name]: e.target.value })
+    const field = e.target.name
+    const value = e.target.value
+    setMovie({ ...movie, [field]: value })
   }
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -50,7 +86,20 @@ const MovieForm: React.FC<MovieFormProps> = ({ onSubmit, close }) => {
     if (dateError) {
       return
     }
-    onSubmit({ ...movie, id: uuidv4() })
+    for (const date in [movie.viewDate, movie.premiereDate]) {
+      if (!validateDate(date)) {
+        return
+      }
+    }
+    const viewDate = normalizeDate(movie.viewDate)
+    const premiereDate = normalizeDate(movie.premiereDate)
+
+    onSubmit({
+      id: uuidv4(),
+      title: movie.title,
+      view_date: viewDate,
+      premiere_date: premiereDate,
+    })
     setMovie(createInitialMovieState())
   }
 
@@ -73,7 +122,7 @@ const MovieForm: React.FC<MovieFormProps> = ({ onSubmit, close }) => {
         <input
           type="text"
           name="view_date"
-          value={movie.view_date}
+          value={movie.viewDate}
           onChange={handleChange}
         />
       </div>
@@ -82,7 +131,7 @@ const MovieForm: React.FC<MovieFormProps> = ({ onSubmit, close }) => {
         <input
           type="text"
           name="premiere_date"
-          value={movie.premiere_date}
+          value={movie.premiereDate}
           onChange={handleChange}
         />
       </div>
