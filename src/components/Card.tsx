@@ -66,6 +66,12 @@ export default function Card({ movie, color }: Props) {
               {viewDateString}
             </p>
           )}
+          {movie.premiere_date && (
+            <p>
+              <strong>Estreno: </strong>
+              {movie.premiere_date}
+            </p>
+          )}
         </div>
       ) : null}
     </div>
