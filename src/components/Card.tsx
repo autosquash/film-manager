@@ -18,9 +18,12 @@ interface Props {
 export default function Card({ movie, color }: Props) {
   const [open, setOpen] = useState(false)
 
-  const viewDateString = parseViewDate(movie.view_date)
+  const viewDateString = parseDate(movie.view_date)
+  const premiereDateString = parseDate(movie.premiere_date)
 
-  const isExpandable = Boolean(movie.image_url || viewDateString)
+  const isExpandable = Boolean(
+    movie.image_url || viewDateString || premiereDateString
+  )
   const cardClassNames = `${styles.movieCard} ${
     isExpandable ? styles.movieCardExpandable : ''
   }`
@@ -66,10 +69,10 @@ export default function Card({ movie, color }: Props) {
               {viewDateString}
             </p>
           )}
-          {movie.premiere_date && (
+          {premiereDateString && (
             <p>
               <strong>Estreno: </strong>
-              {movie.premiere_date}
+              {premiereDateString}
             </p>
           )}
         </div>
@@ -78,9 +81,13 @@ export default function Card({ movie, color }: Props) {
   )
 }
 
-const parseViewDate = (viewDate: string | null | undefined): string => {
-  if (!viewDate || viewDate === 'unknown') {
+const parseDate = (date: string | null | undefined): string => {
+  if (!date) {
     return ''
   }
-  return viewDate!.split('-').reverse().join('-')
+  const [year, month, day] = date.split('-')
+  if (year.length !== 4) {
+    throw new Error('Wrong year length in date: ' + date)
+  }
+  return [day, month, year].join('-')
 }
