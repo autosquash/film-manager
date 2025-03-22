@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react'
 import '../css/App.css'
 import styles from '../css/App.module.css'
 import Card, { Movie } from './Card'
-import ImageLoader from './ImageLoader'
 import MovieForm from './MovieForm'
 
 const colors = [
@@ -20,7 +19,6 @@ export default function App() {
   const [showForm, setShowForm] = useState(false)
 
   useEffect(() => {
-    console.log('trying to fetch movies')
     invoke<Movie[]>('get_movies').then((fetchedMovies) => {
       setMovies(fetchedMovies)
     })
@@ -31,7 +29,7 @@ export default function App() {
       return
     }
     invoke<void>('save_movies', { movies }).then(() => {
-      console.log('Se guardaron las películas')
+      alert('Se guardaron las películas')
     })
   }, [movies])
 
@@ -50,7 +48,6 @@ export default function App() {
           <h1 className={styles.title}>
             Ya hemos visto como mínimo {movies.length} películas
           </h1>
-          <ImageLoader />
           <button onClick={() => setShowForm(!showForm)}>
             Añadir película
           </button>

@@ -1,8 +1,17 @@
-import { invoke } from '@tauri-apps/api/core'
-import React, { useEffect } from 'react'
+import React from 'react'
 
-function ImageLoader() {
-  const [selectedFile, setSelectedFile] = React.useState<File | null>(null)
+export type FileData = {
+  ext: string
+  fileBytes: readonly number[]
+}
+
+type Props = Readonly<{
+  movieTitle: string
+  onSave: (data: FileData) => void
+}>
+
+function ImageLoader({ onSave }: Props) {
+  const [imagePreview, setImagePreview] = React.useState<string | null>(null)
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files
@@ -13,22 +22,11 @@ function ImageLoader() {
     if (!file) {
       return
     }
-    setSelectedFile(file)
-
-    console.log(file)
+    handleSaveFile(file)
+    setImagePreview(getImagePreview(file))
   }
 
-  // Puedes mostrar la imagen directamente en la vista, creando un blob
-  const getImagePreview = () => {
-    if (!selectedFile) return null
-    return URL.createObjectURL(selectedFile)
-  }
-
-  useEffect(() => {
-    handleSaveFile()
-  }, [selectedFile])
-
-  const handleSaveFile = async () => {
+  const handleSaveFile = async (selectedFile: File) => {
     if (!selectedFile) return
 
     try {
@@ -41,15 +39,14 @@ function ImageLoader() {
       // 3) Convertirlo a un array de bytes (números)
       const fileBytes = Array.from(uint8Array)
 
-      // 4) Invocar el comando 'save_image'
-      //    El primer argumento es el comando,
-      //    el segundo un objeto con los parámetros que definiste en Rust
-      await invoke('save_image', {
-        fileBytes,
-        fileName: selectedFile.name, // o algún nombre personalizado
-      })
-
-      alert('Archivo guardado correctamente en la carpeta images!')
+      if (!selectedFile.name.includes('.')) {
+        return
+      }
+      const [base, ext] = selectedFile.name.split('.')
+      if (!base || !ext) {
+        return
+      }
+      onSave({ fileBytes, ext })
     } catch (error) {
       console.error('Error al guardar el archivo:', error)
     }
@@ -59,16 +56,20 @@ function ImageLoader() {
     <div>
       <input type="file" accept="image/*" onChange={handleFileChange} />
 
-      {/* Vista previa de la imagen (opcional) */}
-      {selectedFile && (
+      {imagePreview && (
         <img
-          src={getImagePreview() || undefined}
+          src={imagePreview || undefined}
           alt="Vista previa"
           style={{ maxWidth: 300 }}
         />
       )}
     </div>
   )
+}
+
+const getImagePreview = (selectedFile: File | null): string | null => {
+  if (!selectedFile) return null
+  return URL.createObjectURL(selectedFile)
 }
 
 export default ImageLoader
