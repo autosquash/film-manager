@@ -28,3 +28,4 @@ src/**/*.module.css.d.ts
 
 # Specific to the project
 data/*
+output/*
