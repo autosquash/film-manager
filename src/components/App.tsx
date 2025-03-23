@@ -14,31 +14,53 @@ const colors = [
   'LightSeaGreen',
 ]
 
+type MoviesState = Readonly<{
+  movies: readonly Movie[]
+  needsSave: boolean
+}>
+
 export default function App() {
-  const [movies, setMovies] = useState<Movie[]>([])
+  const [moviesState, setMoviesState] = useState<MoviesState>({
+    movies: [],
+    needsSave: false,
+  })
   const [showForm, setShowForm] = useState(false)
 
   useEffect(() => {
     invoke<Movie[]>('get_movies').then((fetchedMovies) => {
-      setMovies(fetchedMovies)
+      setMoviesState({ movies: fetchedMovies, needsSave: false })
     })
   }, [])
 
   useEffect(() => {
-    if (!movies.length) {
+    if (!moviesState.needsSave) {
       return
     }
-    invoke<void>('save_movies', { movies }).then(() => {
-      alert('Se guardaron las películas')
-    })
-  }, [movies])
+    const saveMovies = async () => {
+      try {
+        await invoke<void>('save_movies', {
+          movies: moviesState.movies,
+        })
+      } catch (err) {
+        console.error(err)
+        alert('Hubo un error y las películas no se guardaron correctamente')
+        return
+      }
+      setMoviesState((prev) => ({ ...prev, needsSave: false }))
+      alert('Las películas se actualizaron correctamente')
+    }
+    saveMovies()
+  }, [moviesState.needsSave])
 
   return (
     <div className={styles.container}>
       {showForm ? (
         <MovieForm
           onSubmit={(newMovie: Movie) => {
-            setMovies([...movies, newMovie])
+            setMoviesState((prev) => ({
+              movies: [...prev.movies, newMovie],
+              needsSave: true,
+            }))
             setShowForm(false)
           }}
           close={() => setShowForm(false)}
@@ -46,13 +68,13 @@ export default function App() {
       ) : (
         <>
           <h1 className={styles.title}>
-            Ya hemos visto como mínimo {movies.length} películas
+            Ya hemos visto como mínimo {moviesState.movies.length} películas
           </h1>
           <button onClick={() => setShowForm(!showForm)}>
             Añadir película
           </button>
           <ul className={styles.moviesList}>
-            {movies.map((movie, index) => (
+            {moviesState.movies.map((movie, index) => (
               <li key={movie.id}>
                 <Card movie={movie} color={colors[index % colors.length]} />
               </li>

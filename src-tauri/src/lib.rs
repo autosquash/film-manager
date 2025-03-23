@@ -36,10 +36,11 @@ fn get_movies() -> Vec<Movie> {
 }
 
 #[command]
-fn save_movies(movies: Vec<Movie>) {
+fn save_movies(movies: Vec<Movie>) -> Result<(), String> {
     let data = Data { movies };
-    let file = File::create(DATA_PATH).unwrap();
-    to_writer_pretty(file, &data).unwrap()
+    let file = File::create(DATA_PATH).map_err(|e| e.to_string())?;
+    to_writer_pretty(file, &data).map_err(|e| e.to_string())?;
+    Ok(())
 }
 
 #[command]
