@@ -1,80 +1,18 @@
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
-mod utils;
-use serde::{Deserialize, Serialize};
-use serde_json::to_writer_pretty;
-use std::{
-    fs::{self, File},
-    path::PathBuf,
-};
-use tauri::command;
-use utils::get_unique_filename;
-use uuid::Uuid;
+mod commands;
 
-#[derive(Serialize, Deserialize, Debug)]
-struct Movie {
-    title: String,
-    view_date: Option<String>,
-    premiere_date: Option<String>,
-    movie_url: Option<String>,
-    image_url: Option<String>,
-    id: Uuid,
-}
+// use commands::get_movies;
 
-#[derive(Serialize, Deserialize, Debug)]
-struct Data {
-    movies: Vec<Movie>,
-}
-
-const DATA_PATH: &str = "../data/movies.json";
-
-#[command]
-fn get_movies() -> Vec<Movie> {
-    let path = PathBuf::from(DATA_PATH);
-    let data = fs::read_to_string(path).unwrap();
-    let data: Data = serde_json::from_str(&data).unwrap();
-    data.movies
-}
-
-#[command]
-fn save_movies(movies: Vec<Movie>) -> Result<(), String> {
-    let data = Data { movies };
-    let file = File::create(DATA_PATH).map_err(|e| e.to_string())?;
-    to_writer_pretty(file, &data).map_err(|e| e.to_string())?;
-    Ok(())
-}
-
-#[command]
-fn save_image(file_bytes: Vec<u8>, file_name: String) -> Result<String, String> {
-    let images_dir = PathBuf::from("../data/images");
-
-    // Ensure "images" directory exist
-    if let Err(err) = fs::create_dir_all(&images_dir) {
-        return Err(format!("Error creando directorio: {}", err));
-    }
-
-    let unique_filename = get_unique_filename(&images_dir, &file_name)?;
-
-    // Build the full path: images/<filename>
-    let file_path = images_dir.join(&unique_filename);
-
-    // Write the bytes in that path
-    match fs::write(&file_path, file_bytes) {
-        Ok(_) => {
-            println!("El archivo se guardó bien");
-            Ok(unique_filename)
-        }
-        Err(err) => Err(format!("Error guardando archivo: {}", err)),
-    }
-}
+use std::path::PathBuf;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
         .invoke_handler(tauri::generate_handler![
-            get_movies,
-            save_movies,
-            save_image
+            commands::get_movies::get_movies,
+            commands::save_movies::save_movies,
+            commands::save_image::save_image
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
