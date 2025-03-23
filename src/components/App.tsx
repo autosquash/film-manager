@@ -61,20 +61,19 @@ export default function App() {
     setMoviesState((prev) => ({ ...prev, needsSave: false }))
   }, [moviesState.needsSave])
 
+  const addMovie = (newMovie: Movie) => {
+    setMoviesState((prev) => ({
+      movies: [...prev.movies, newMovie],
+      needsSave: true,
+    }))
+    setShowForm(false)
+  }
+
   return (
     <div className={styles.container}>
       <Toaster />
       {showForm ? (
-        <MovieForm
-          onSubmit={(newMovie: Movie) => {
-            setMoviesState((prev) => ({
-              movies: [...prev.movies, newMovie],
-              needsSave: true,
-            }))
-            setShowForm(false)
-          }}
-          close={() => setShowForm(false)}
-        />
+        <MovieForm onSubmit={addMovie} close={() => setShowForm(false)} />
       ) : (
         <>
           <h1 className={styles.title}>
