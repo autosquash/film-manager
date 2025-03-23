@@ -19,30 +19,28 @@ const colors = [
 
 type MoviesState = Readonly<{
   movies: readonly Movie[]
-  needsSave: boolean
 }>
 
 export default function App() {
   const [moviesState, setMoviesState] = useState<MoviesState>({
     movies: [],
-    needsSave: false,
   })
   const [showForm, setShowForm] = useState(false)
 
   useEffect(() => {
     invoke<Movie[]>('get_movies').then((fetchedMovies) => {
-      setMoviesState({ movies: fetchedMovies, needsSave: false })
+      setMoviesState({ movies: fetchedMovies })
     })
   }, [])
 
-  useEffect(() => {
-    if (!moviesState.needsSave) {
-      return
-    }
+  const addMovie = (newMovie: Movie) => {
+    const newMovies = [...moviesState.movies, newMovie]
+
+    setShowForm(false)
     const saveMovies = async () => {
       try {
         await invoke<void>('save_movies', {
-          movies: moviesState.movies,
+          movies: newMovies,
         })
       } catch (err) {
         console.error(err)
@@ -54,19 +52,10 @@ export default function App() {
         )
         return
       }
-
-      notify('Las películas se actualizaron correctamente')
+      setMoviesState({ movies: newMovies })
+      notify('La película se añadió correctamente')
     }
     saveMovies()
-    setMoviesState((prev) => ({ ...prev, needsSave: false }))
-  }, [moviesState.needsSave])
-
-  const addMovie = (newMovie: Movie) => {
-    setMoviesState((prev) => ({
-      movies: [...prev.movies, newMovie],
-      needsSave: true,
-    }))
-    setShowForm(false)
   }
 
   return (
