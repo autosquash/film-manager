@@ -1,9 +1,12 @@
 import { invoke } from '@tauri-apps/api/core'
 import { useEffect, useState } from 'react'
+import toast, { Toaster } from 'react-hot-toast'
 import '../css/App.css'
 import styles from '../css/App.module.css'
 import Card, { Movie } from './Card'
 import MovieForm from './MovieForm'
+
+const notify = (msg: string) => toast(msg)
 
 const colors = [
   'orange',
@@ -43,17 +46,24 @@ export default function App() {
         })
       } catch (err) {
         console.error(err)
-        alert('Hubo un error y las películas no se guardaron correctamente')
+        toast.error(
+          'Hubo un error y las películas no se guardaron correctamente',
+          {
+            icon: '⚠️',
+          }
+        )
         return
       }
-      setMoviesState((prev) => ({ ...prev, needsSave: false }))
-      alert('Las películas se actualizaron correctamente')
+
+      notify('Las películas se actualizaron correctamente')
     }
     saveMovies()
+    setMoviesState((prev) => ({ ...prev, needsSave: false }))
   }, [moviesState.needsSave])
 
   return (
     <div className={styles.container}>
+      <Toaster />
       {showForm ? (
         <MovieForm
           onSubmit={(newMovie: Movie) => {
