@@ -32,9 +32,20 @@ const MovieForm: React.FC<Props> = ({ onSubmit, close }) => {
   }, [movie.title])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const field = e.target.name
+    let field = e.target.name
     const value = e.target.value
-    setMovie({ ...movie, [field]: value })
+    switch (field) {
+      case 'view_date':
+        field = 'viewDate'
+        break
+      case 'premiere_date':
+        field = 'premiereDate'
+        break
+      default:
+        break
+    }
+    const newMovie = { ...movie, [field]: value }
+    setMovie(newMovie)
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
