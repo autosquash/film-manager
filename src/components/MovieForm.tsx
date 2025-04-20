@@ -2,7 +2,7 @@ import { invoke } from '@tauri-apps/api/core'
 import { useEffect, useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import styles from '../css/MovieForm.module.css'
-import { Movie } from '../utils/repository'
+import { Movie } from '../model'
 import { convertTitleToFileNameBase } from '../utils/transformations'
 import ImageLoader, { FileData } from './ImageLoader'
 
@@ -79,9 +79,10 @@ const MovieForm: React.FC<Props> = ({ onSubmit, close }) => {
     onSubmit({
       id: uuidv4(),
       title: movie.title,
-      view_date: viewDate,
-      premiere_date: premiereDate,
-      image_url: imageURL,
+      viewDate: viewDate,
+      premiereDate: premiereDate,
+      imageUrl: imageURL,
+      movieURL: null,
     })
     setMovie(createInitialMovieState())
   }

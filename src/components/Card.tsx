@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import styles from '../css/Card.module.css'
-import { Movie } from '../utils/repository'
+import type { Movie } from '../model'
 
 interface Props {
   movie: Movie
@@ -10,11 +10,11 @@ interface Props {
 export default function Card({ movie, color }: Props) {
   const [open, setOpen] = useState(false)
 
-  const viewDateString = parseDate(movie.view_date)
-  const premiereDateString = parseDate(movie.premiere_date)
+  const viewDateString = parseDate(movie.viewDate)
+  const premiereDateString = parseDate(movie.premiereDate)
 
   const isExpandable = Boolean(
-    movie.image_url || viewDateString || premiereDateString
+    movie.imageUrl || viewDateString || premiereDateString
   )
   const cardClassNames = `${styles.movieCard} ${
     isExpandable ? styles.movieCardExpandable : ''
@@ -43,9 +43,9 @@ export default function Card({ movie, color }: Props) {
           }}
         >
           <>
-            {movie.image_url ? (
+            {movie.imageUrl ? (
               <img
-                src={`data/${movie.image_url}`}
+                src={`data/${movie.imageUrl}`}
                 alt={movie.title}
                 className={styles.movieThumbnail}
               />
