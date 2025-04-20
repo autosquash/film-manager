@@ -2,8 +2,8 @@ import { invoke } from '@tauri-apps/api/core'
 import { useEffect, useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import styles from '../css/MovieForm.module.css'
+import { Movie } from '../utils/repository'
 import { convertTitleToFileNameBase } from '../utils/transformations'
-import { Movie } from './Card'
 import ImageLoader, { FileData } from './ImageLoader'
 
 interface Props {

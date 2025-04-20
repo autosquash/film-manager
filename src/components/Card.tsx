@@ -1,14 +1,6 @@
 import { useState } from 'react'
 import styles from '../css/Card.module.css'
-
-export interface Movie {
-  title: string
-  view_date?: string | null
-  image_url?: string | null
-  premiere_date?: string | null
-  movie_url?: string | null
-  id: string
-}
+import { Movie } from '../utils/repository'
 
 interface Props {
   movie: Movie

@@ -3,7 +3,8 @@ import { useEffect, useState } from 'react'
 import toast, { Toaster } from 'react-hot-toast'
 import '../css/App.css'
 import styles from '../css/App.module.css'
-import Card, { Movie } from './Card'
+import repository, { Movie } from '../utils/repository'
+import Card from './Card'
 import MovieForm from './MovieForm'
 
 const notify = (msg: string) => toast(msg)
@@ -39,9 +40,7 @@ export default function App() {
     setShowForm(false)
     const saveMovies = async () => {
       try {
-        await invoke<void>('save_movies', {
-          movies: newMovies,
-        })
+        await repository.saveMovies(newMovies)
       } catch (err) {
         console.error(err)
         toast.error(
