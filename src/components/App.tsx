@@ -1,4 +1,3 @@
-import { invoke } from '@tauri-apps/api/core'
 import { useEffect, useState } from 'react'
 import toast, { Toaster } from 'react-hot-toast'
 import '../css/App.css'
@@ -29,7 +28,7 @@ export default function App() {
   const [showForm, setShowForm] = useState(false)
 
   useEffect(() => {
-    invoke<Movie[]>('get_movies').then((fetchedMovies) => {
+    repository.getMovies().then((fetchedMovies) => {
       setMoviesState({ movies: fetchedMovies })
     })
   }, [])

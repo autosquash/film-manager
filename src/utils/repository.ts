@@ -15,4 +15,8 @@ async function saveMovies(movies: readonly Movie[]) {
   })
 }
 
-export default { saveMovies }
+async function getMovies(): Promise<Movie[]> {
+  return invoke<Movie[]>('get_movies')
+}
+
+export default { saveMovies, getMovies }
