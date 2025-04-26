@@ -944,6 +944,7 @@ dependencies = [
  "regex",
  "serde",
  "serde_json",
+ "sluggify",
  "tauri",
  "tauri-build",
  "tauri-plugin-opener",
@@ -3471,6 +3472,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8f92a496fb766b417c996b9c5e57daf2f7ad3b0bebe1ccfca4856390e3d3bb67"
 dependencies = [
  "autocfg",
+]
+
+[[package]]
+name = "sluggify"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f87ca5434e5d26d91f393b7e6b4db8ea1f1a5f463fe92e39e31b73a3be3f989d"
+dependencies = [
+ "regex",
 ]
 
 [[package]]

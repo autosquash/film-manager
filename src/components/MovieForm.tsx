@@ -2,8 +2,7 @@ import { invoke } from '@tauri-apps/api/core'
 import { useEffect, useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import styles from '../css/MovieForm.module.css'
-import { Movie } from '../model'
-import { convertTitleToFileNameBase } from '../utils/transformations'
+import type { Movie } from '../model'
 import ImageLoader, { FileData } from './ImageLoader'
 
 interface Props {
@@ -68,10 +67,10 @@ const MovieForm: React.FC<Props> = ({ onSubmit, close }) => {
 
     if (imageFileData) {
       const { fileBytes, ext } = imageFileData
-      const fileName = convertTitleToFileNameBase(movie.title) + '.' + ext
       const name = await invoke<string>('save_image', {
         fileBytes,
-        fileName,
+        movieTitle: movie.title,
+        ext,
       })
       imageURL = `images/${name}`
     }
