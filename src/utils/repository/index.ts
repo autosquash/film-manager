@@ -1,5 +1,5 @@
 import { invoke } from '@tauri-apps/api/core'
-import { DateString, Movie, Title } from '../utils/model'
+import { DateString, Movie, Title } from '../model'
 
 export interface DbMovie {
   title: string
