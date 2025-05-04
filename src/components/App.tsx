@@ -65,7 +65,7 @@ export default function App() {
       ) : (
         <>
           <h1 className={styles.title}>
-            Ya hemos visto como mínimo {moviesState.movies.length} películas
+            Hemos visto al menos {moviesState.movies.length} películas
           </h1>
           <button onClick={() => setShowForm(!showForm)}>
             Añadir película
