@@ -1,24 +1,10 @@
 import { invoke } from '@tauri-apps/api/core'
 import { DateString, Movie, Title } from '../model'
+import { movieToDbMovie } from './dbTransform'
+import type { DbMovie } from './types'
 
-export interface DbMovie {
-  title: string
-  view_date: string | null
-  image_url: string | null
-  premiere_date: string | null
-  movie_url: string | null
-  id: string
-}
-
-async function saveMovies(movies: readonly Movie[]) {
-  const dbMovies = movies.map((movie) => ({
-    title: movie.title.value,
-    view_date: movie.viewDate?.value ?? null,
-    image_url: movie.imageURL,
-    premiere_date: movie.premiereDate?.value ?? null,
-    movie_url: movie.movieURL,
-    id: movie.id,
-  }))
+async function saveMovies(movies: readonly Movie[]): Promise<void> {
+  const dbMovies = movies.map(movieToDbMovie)
   await invoke<void>('save_movies', {
     movies: dbMovies satisfies readonly DbMovie[],
   })
