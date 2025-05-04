@@ -2,6 +2,7 @@ import { invoke } from '@tauri-apps/api/core'
 import { useEffect, useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import styles from '../css/MovieForm.module.css'
+import { normalizeDate } from '../utils/dateProcessing'
 import { DateString, Title, type Movie } from '../utils/model'
 import ImageLoader, { FileData } from './ImageLoader'
 
@@ -155,42 +156,6 @@ const createInitialMovieState = () => ({
 
 const validateDate = (date: string) => {
   return /^\d{1,2}-\d{1,2}-\d{2,4}$/.test(date)
-}
-
-function normalizeDate(date: string): string | null {
-  if (!date) {
-    return null
-  }
-  const items = date.split('-')
-  if (items.length !== 3) {
-    throw new Error('Wrong length')
-  }
-  let [day, month, year] = items
-  if (year.length == 2) {
-    year = '20' + year
-  }
-  if (year.length !== 4) {
-    throw new Error(`Wrong length of year string: ${year.length}`)
-  }
-
-  if (day.length === 1) {
-    day = '0' + day
-  }
-  if (day.length !== 2) {
-    throw new Error('Wrong length of day string')
-  }
-
-  if (month.length === 1) {
-    month = '0' + month
-  }
-  if (month.length !== 2) {
-    throw new Error('Wrong length of month string')
-  }
-
-  if (parseInt(day) > 31 || parseInt(month) > 12) {
-    throw new Error('Invalid value for date')
-  }
-  return [year, month, day].join('-')
 }
 
 async function saveImage(
