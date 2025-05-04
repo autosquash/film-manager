@@ -1,0 +1,21 @@
+{
+    "mainTitle": "We have watched at least {{numberOfMovies}} movies",
+    "addMovie": "Add movie",
+    "submitMovie": "Add movie",
+    "movieAdded": "The movie was added successfully",
+    "updateFailed": "There was an error and the movies were not saved correctly",
+    "settings": "Settings",
+    "imageNotAvailable": "Image not available",
+    "view": "View",
+    "premiere": "Premiere",
+    "titleIsMandatory": "The title is mandatory.",
+    "formatDates": "Dates must be in the format {{format}}.",
+    "cancel": "Cancel",
+    "title": "Title",
+    "viewDate": "Viewing date",
+    "premiereDate": "Premiere date",
+    "savingError": "Error saving file",
+    "chooseLang": "Choose the app language",
+    "eng": "English",
+    "spa": "Spanish"
+}

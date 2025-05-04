@@ -1,0 +1,21 @@
+{
+    "mainTitle": "Hemos visto al menos {{numberOfMovies}} películas",
+    "addMovie": "Añadir película",
+    "submitMovie": "Agregar película",
+    "movieAdded": "La película se añadió correctamente",
+    "updateFailed": "Hubo un error y las películas no se guardaron correctamente",
+    "settings": "Ajustes",
+    "imageNotAvailable": "Imagen no disponible",
+    "view": "Vista",
+    "premiere": "Estreno",
+    "titleIsMandatory": "El título es obligatorio.",
+    "formatDates": "Las fechas deben tener el formato {{format}}.",
+    "cancel": "Cancelar",
+    "title": "Título",
+    "viewDate": "Fecha de visionado",
+    "premiereDate": "Fecha de estreno",
+    "savingError": "Error al guardar el archivo",
+    "chooseLang": "Elige el idioma de la aplicación",
+    "eng": "inglés",
+    "spa": "español"
+}

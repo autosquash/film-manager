@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import styles from '../css/Card.module.css'
 import type { Movie } from '../utils/model'
 
@@ -8,6 +9,7 @@ interface Props {
 }
 
 export default function Card({ movie, color }: Props) {
+  const { t } = useTranslation()
   const [open, setOpen] = useState(false)
 
   const viewDateString = movie.viewDate?.simpleFormat()
@@ -43,19 +45,19 @@ export default function Card({ movie, color }: Props) {
               />
             ) : (
               <p>
-                <em>Imagen no disponible</em>
+                <em>{t('imageNotAvailable')}</em>
               </p>
             )}
           </>
           {viewDateString && (
             <p>
-              <strong>Vista: </strong>
+              <strong>{t('view')}: </strong>
               {viewDateString}
             </p>
           )}
           {premiereDateString && (
             <p>
-              <strong>Estreno: </strong>
+              <strong>{t('premiere')}: </strong>
               {premiereDateString}
             </p>
           )}

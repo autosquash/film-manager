@@ -1,5 +1,6 @@
 import { invoke } from '@tauri-apps/api/core'
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { v4 as uuidv4 } from 'uuid'
 import styles from '../css/MovieForm.module.css'
 import { normalizeDate } from '../utils/dateProcessing'
@@ -19,6 +20,7 @@ interface Props {
 }
 
 const MovieForm = ({ onSubmit, close }: Props) => {
+  const { t } = useTranslation()
   const [movie, setMovie] = useState<MovieInputState>(createInitialMovieState())
   const [titleError, setTitleError] = useState('')
   const [dateError, setDateError] = useState('')
@@ -29,7 +31,7 @@ const MovieForm = ({ onSubmit, close }: Props) => {
       (movie.viewDate && !validateDate(movie.viewDate)) ||
       (movie.premiereDate && !validateDate(movie.premiereDate))
     ) {
-      setDateError('Las fechas deben tener el formato dd-mm-YY.')
+      setDateError(t('formatDates', { format: 'dd-mm-YY' }))
     } else {
       setDateError('')
     }
@@ -62,7 +64,7 @@ const MovieForm = ({ onSubmit, close }: Props) => {
     e.preventDefault()
     const trimmedMovieTitle = movie.title.trim()
     if (!trimmedMovieTitle) {
-      setTitleError('El título es obligatorio.')
+      setTitleError(t('titleIsMandatory'))
       return
     }
     const movieTitle = new Title(trimmedMovieTitle)
@@ -101,7 +103,7 @@ const MovieForm = ({ onSubmit, close }: Props) => {
   return (
     <form className={styles.form} onSubmit={handleSubmit}>
       <div className={styles.field}>
-        <label>Título:</label>
+        <label>{t('title')}:</label>
         <input
           type="text"
           name="title"
@@ -111,7 +113,7 @@ const MovieForm = ({ onSubmit, close }: Props) => {
         />
       </div>
       <div className={styles.field}>
-        <label>Fecha de visionado (dd-mm-YY):</label>
+        <label>{t('viewDate')} (dd-mm-YY):</label>
         <input
           type="text"
           name="view_date"
@@ -120,7 +122,7 @@ const MovieForm = ({ onSubmit, close }: Props) => {
         />
       </div>
       <div className={styles.field}>
-        <label>Fecha de estreno (dd-mm-YY):</label>
+        <label>{t('premiereDate')} (dd-mm-YY):</label>
         <input
           type="text"
           name="premiere_date"
@@ -137,9 +139,9 @@ const MovieForm = ({ onSubmit, close }: Props) => {
       />
 
       {errorToDisplay && <p className={styles.error}>{errorToDisplay}</p>}
-      <button type="submit">Agregar película</button>
+      <button type="submit">{t('submitMovie')}</button>
       <button onClick={close} style={{ backgroundColor: 'darkred' }}>
-        Cancelar
+        {t('cancel')}
       </button>
     </form>
   )

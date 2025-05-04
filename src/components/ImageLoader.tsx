@@ -1,4 +1,5 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 export type FileData = {
   ext: string
@@ -11,6 +12,7 @@ type Props = Readonly<{
 }>
 
 function ImageLoader({ onSave }: Props) {
+  const { t } = useTranslation()
   const [imagePreview, setImagePreview] = React.useState<string | null>(null)
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -30,13 +32,13 @@ function ImageLoader({ onSave }: Props) {
     if (!selectedFile) return
 
     try {
-      // 1) Convertir el File en ArrayBuffer
+      // 1) Convert the File to an ArrayBuffer
       const arrayBuffer = await selectedFile.arrayBuffer()
 
-      // 2) Pasar a Uint8Array para poder transformarlo en un array normal
+      // 2) Convert to Uint8Array to be able to transform it into a regular array
       const uint8Array = new Uint8Array(arrayBuffer)
 
-      // 3) Convertirlo a un array de bytes (números)
+      // 3) Convert it to an array of bytes (numbers)
       const fileBytes = Array.from(uint8Array)
 
       if (!selectedFile.name.includes('.')) {
@@ -48,7 +50,7 @@ function ImageLoader({ onSave }: Props) {
       }
       onSave({ fileBytes, ext })
     } catch (error) {
-      console.error('Error al guardar el archivo:', error)
+      console.error(`${t('savingError')}:`, error)
     }
   }
 

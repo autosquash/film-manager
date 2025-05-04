@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react'
 import toast, { Toaster } from 'react-hot-toast'
+import { useTranslation } from 'react-i18next'
 import '../css/App.css'
 import styles from '../css/App.module.css'
 import { Movie } from '../utils/model'
 import repository from '../utils/repository'
 import Card from './Card'
 import MovieForm from './MovieForm'
+import Settings from './Settings'
 
 const notify = (msg: string) => toast(msg)
 
@@ -23,6 +25,9 @@ type MoviesState = Readonly<{
 }>
 
 export default function App() {
+  const { t } = useTranslation()
+
+  const [displaySettings, setDisplaySettings] = useState(false)
   const [moviesState, setMoviesState] = useState<MoviesState>({
     movies: [],
   })
@@ -43,42 +48,53 @@ export default function App() {
         await repository.saveMovies(newMovies)
       } catch (err) {
         console.error(err)
-        toast.error(
-          'Hubo un error y las películas no se guardaron correctamente',
-          {
-            icon: '⚠️',
-          }
-        )
+        toast.error(t('updateFailed'), {
+          icon: '⚠️',
+        })
         return
       }
       setMoviesState({ movies: newMovies })
-      notify('La película se añadió correctamente')
+      notify(t('movieAdded'))
     }
     saveMovies()
   }
 
+  if (displaySettings) {
+    return (
+      <div className={styles.container}>
+        {' '}
+        <Settings close={() => setDisplaySettings(false)} />
+      </div>
+    )
+  }
+
   return (
-    <div className={styles.container}>
-      <Toaster />
-      {showForm ? (
-        <MovieForm onSubmit={addMovie} close={() => setShowForm(false)} />
-      ) : (
-        <>
-          <h1 className={styles.title}>
-            Hemos visto al menos {moviesState.movies.length} películas
-          </h1>
-          <button onClick={() => setShowForm(!showForm)}>
-            Añadir película
-          </button>
-          <ul className={styles.moviesList}>
-            {moviesState.movies.map((movie, index) => (
-              <li key={movie.id}>
-                <Card movie={movie} color={colors[index % colors.length]} />
-              </li>
-            ))}
-          </ul>
-        </>
-      )}
+    <div>
+      <div className={styles.container}>
+        <Toaster />
+        {showForm ? (
+          <MovieForm onSubmit={addMovie} close={() => setShowForm(false)} />
+        ) : (
+          <>
+            <h1 className={styles.title}>
+              {t('mainTitle', { numberOfMovies: moviesState.movies.length })}
+            </h1>
+            <button onClick={() => setShowForm(!showForm)}>
+              {t('addMovie')}
+            </button>
+            <ul className={styles.moviesList}>
+              {moviesState.movies.map((movie, index) => (
+                <li key={movie.id}>
+                  <Card movie={movie} color={colors[index % colors.length]} />
+                </li>
+              ))}
+            </ul>
+          </>
+        )}
+      </div>
+      <div style={{ padding: 20 }} onClick={() => setDisplaySettings(true)}>
+        {t('settings')}
+      </div>
     </div>
   )
 }
