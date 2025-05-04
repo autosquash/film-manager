@@ -2,7 +2,7 @@ import { invoke } from '@tauri-apps/api/core'
 import { useEffect, useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import styles from '../css/MovieForm.module.css'
-import { Title, type Movie } from '../utils/model'
+import { DateString, Title, type Movie } from '../utils/model'
 import ImageLoader, { FileData } from './ImageLoader'
 
 type MovieInputState = Readonly<{
@@ -93,9 +93,9 @@ const MovieForm = ({ onSubmit, close }: Props) => {
     onSubmit({
       id: uuidv4(),
       title: movieTitle,
-      viewDate: viewDate,
-      premiereDate: premiereDate,
-      imageUrl: imageURL,
+      viewDate: viewDate ? new DateString(viewDate) : null,
+      premiereDate: premiereDate ? new DateString(premiereDate) : null,
+      imageURL: imageURL,
       movieURL: null,
     })
     setMovie(createInitialMovieState())

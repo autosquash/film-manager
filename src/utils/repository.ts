@@ -1,5 +1,5 @@
 import { invoke } from '@tauri-apps/api/core'
-import { Movie, Title } from '../utils/model'
+import { DateString, Movie, Title } from '../utils/model'
 
 export interface DbMovie {
   title: string
@@ -13,9 +13,9 @@ export interface DbMovie {
 async function saveMovies(movies: readonly Movie[]) {
   const dbMovies = movies.map((movie) => ({
     title: movie.title.value,
-    view_date: movie.viewDate,
-    image_url: movie.imageUrl,
-    premiere_date: movie.premiereDate,
+    view_date: movie.viewDate?.value ?? null,
+    image_url: movie.imageURL,
+    premiere_date: movie.premiereDate?.value ?? null,
     movie_url: movie.movieURL,
     id: movie.id,
   }))
@@ -27,12 +27,14 @@ async function saveMovies(movies: readonly Movie[]) {
 async function getMovies(): Promise<Movie[]> {
   const movies = await invoke<DbMovie[]>('get_movies')
   return movies.map((dbMovie) => ({
-    title: new Title(dbMovie.title),
-    viewDate: dbMovie.view_date,
-    imageUrl: dbMovie.image_url,
-    premiereDate: dbMovie.premiere_date,
-    movieURL: dbMovie.movie_url,
     id: dbMovie.id,
+    title: new Title(dbMovie.title),
+    viewDate: dbMovie.view_date ? new DateString(dbMovie.view_date) : null,
+    premiereDate: dbMovie.premiere_date
+      ? new DateString(dbMovie.premiere_date)
+      : null,
+    imageURL: dbMovie.image_url,
+    movieURL: dbMovie.movie_url,
   }))
 }
 
