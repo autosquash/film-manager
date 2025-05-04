@@ -81,13 +81,7 @@ const MovieForm = ({ onSubmit, close }: Props) => {
     let imageURL: string | null = movie.imageURL
 
     if (imageFileData) {
-      const { fileBytes, ext } = imageFileData
-      const name = await invoke<string>('save_image', {
-        fileBytes,
-        movieTitle: movieTitle.value,
-        ext,
-      })
-      imageURL = `images/${name}`
+      imageURL = await saveImage(imageFileData, movieTitle)
     }
 
     onSubmit({
@@ -197,6 +191,19 @@ function normalizeDate(date: string): string | null {
     throw new Error('Invalid value for date')
   }
   return [year, month, day].join('-')
+}
+
+async function saveImage(
+  imageFileData: FileData,
+  movieTitle: Title
+): Promise<string> {
+  const { fileBytes, ext } = imageFileData
+  const name = await invoke<string>('save_image', {
+    fileBytes,
+    movieTitle: movieTitle.value,
+    ext,
+  })
+  return `images/${name}`
 }
 
 export default MovieForm
