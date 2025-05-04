@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import styles from '../css/Card.module.css'
-import type { Movie } from '../model'
+import type { Movie } from '../utils/model'
 
 interface Props {
   movie: Movie
@@ -30,7 +30,7 @@ export default function Card({ movie, color }: Props) {
       onClick={isExpandable ? () => setOpen(!open) : undefined}
     >
       <span>
-        <strong>{movie.title}</strong>
+        <strong>{movie.title.value}</strong>
       </span>
       {open ? (
         <div
@@ -46,7 +46,7 @@ export default function Card({ movie, color }: Props) {
             {movie.imageUrl ? (
               <img
                 src={`data/${movie.imageUrl}`}
-                alt={movie.title}
+                alt={movie.title.value}
                 className={styles.movieThumbnail}
               />
             ) : (

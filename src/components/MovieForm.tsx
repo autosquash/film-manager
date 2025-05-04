@@ -2,22 +2,32 @@ import { invoke } from '@tauri-apps/api/core'
 import { useEffect, useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import styles from '../css/MovieForm.module.css'
-import type { Movie } from '../model'
+import { Title, type Movie } from '../utils/model'
 import ImageLoader, { FileData } from './ImageLoader'
+
+type MovieInputState = Readonly<{
+  title: string
+  viewDate: string
+  premiereDate: string
+  imageURL: string
+}>
 
 interface Props {
   onSubmit: (newMovie: Movie) => void
   close: () => void
 }
 
-const MovieForm: React.FC<Props> = ({ onSubmit, close }) => {
-  const [movie, setMovie] = useState(createInitialMovieState())
+const MovieForm = ({ onSubmit, close }: Props) => {
+  const [movie, setMovie] = useState<MovieInputState>(createInitialMovieState())
   const [titleError, setTitleError] = useState('')
   const [dateError, setDateError] = useState('')
   const [imageFileData, setImageFileData] = useState<FileData | null>(null)
 
   useEffect(() => {
-    if (!validateDate(movie.viewDate) || !validateDate(movie.premiereDate)) {
+    if (
+      (movie.viewDate && !validateDate(movie.viewDate)) ||
+      (movie.premiereDate && !validateDate(movie.premiereDate))
+    ) {
       setDateError('Las fechas deben tener el formato dd-mm-YY.')
     } else {
       setDateError('')
@@ -49,27 +59,32 @@ const MovieForm: React.FC<Props> = ({ onSubmit, close }) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!movie.title.trim()) {
+    const trimmedMovieTitle = movie.title.trim()
+    if (!trimmedMovieTitle) {
       setTitleError('El título es obligatorio.')
       return
     }
+    const movieTitle = new Title(trimmedMovieTitle)
     if (dateError) {
       return
     }
     for (const date of [movie.viewDate, movie.premiereDate]) {
+      if (!date) {
+        continue
+      }
       if (!validateDate(date)) {
         return
       }
     }
-    const viewDate = normalizeDate(movie.viewDate)
-    const premiereDate = normalizeDate(movie.premiereDate)
+    const viewDate = movie.viewDate && normalizeDate(movie.viewDate)
+    const premiereDate = movie.premiereDate && normalizeDate(movie.premiereDate)
     let imageURL: string | null = movie.imageURL
 
     if (imageFileData) {
       const { fileBytes, ext } = imageFileData
       const name = await invoke<string>('save_image', {
         fileBytes,
-        movieTitle: movie.title,
+        movieTitle: movieTitle.value,
         ext,
       })
       imageURL = `images/${name}`
@@ -77,7 +92,7 @@ const MovieForm: React.FC<Props> = ({ onSubmit, close }) => {
 
     onSubmit({
       id: uuidv4(),
-      title: movie.title,
+      title: movieTitle,
       viewDate: viewDate,
       premiereDate: premiereDate,
       imageUrl: imageURL,
@@ -135,6 +150,8 @@ const MovieForm: React.FC<Props> = ({ onSubmit, close }) => {
   )
 }
 
+// Module scope functions
+
 const createInitialMovieState = () => ({
   title: '',
   viewDate: '',
@@ -143,7 +160,7 @@ const createInitialMovieState = () => ({
 })
 
 const validateDate = (date: string) => {
-  return date === '' || /^\d{1,2}-\d{1,2}-\d{2,4}$/.test(date)
+  return /^\d{1,2}-\d{1,2}-\d{2,4}$/.test(date)
 }
 
 function normalizeDate(date: string): string | null {
