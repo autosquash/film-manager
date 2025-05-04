@@ -19,3 +19,11 @@
     margin-top: 12px;
     border-radius: 5px;
 }
+
+.content {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 24px;
+    font-size: 14px;
+    user-select: none;
+}

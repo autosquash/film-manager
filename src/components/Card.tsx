@@ -33,15 +33,7 @@ export default function Card({ movie, color }: Props) {
         <strong>{movie.title.value}</strong>
       </span>
       {open ? (
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            padding: '0 24px',
-            fontSize: '14px',
-            userSelect: 'none',
-          }}
-        >
+        <div className={styles.content}>
           <>
             {movie.imageUrl ? (
               <img
