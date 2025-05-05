@@ -32,4 +32,13 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+    gap: 12px;
+}
+
+.close-button {
+    background-color: orange;
+}
+
+.close-button:hover {
+    background-color: darkorange;
 }

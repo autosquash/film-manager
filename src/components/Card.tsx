@@ -65,6 +65,12 @@ export default function Card({ movie, color, edit }: Props) {
           <div className={styles.buttonContainer}>
             {' '}
             <button onClick={edit}>{t('edit')}</button>
+            <button
+              className={styles.closeButton}
+              onClick={() => setOpen(false)}
+            >
+              {t('close')}
+            </button>
           </div>
         </div>
       ) : null}
