@@ -68,17 +68,19 @@ const MovieForm = ({ onSubmit, close }: Props) => {
       return
     }
     const movieTitle = new Title(trimmedMovieTitle)
+
     if (dateError) {
       return
     }
-    for (const date of [movie.viewDate, movie.premiereDate]) {
-      if (!date) {
-        continue
-      }
-      if (!validateDate(date)) {
-        return
-      }
+    // Check anyway
+    const someDateIsNotValid = [movie.viewDate, movie.premiereDate]
+      .filter(Boolean)
+      .some((d) => !validateDate(d))
+
+    if (someDateIsNotValid) {
+      return
     }
+
     const viewDate = normalizeDate(movie.viewDate)
     const premiereDate = normalizeDate(movie.premiereDate)
     let imageURL: string | null = movie.imageURL
