@@ -5,8 +5,8 @@ import '../css/App.css'
 import styles from '../css/App.module.css'
 import { Movie } from '../utils/model'
 import repository from '../utils/repository'
+import AddMoviePage from './AddMoviePage'
 import Card from './Card'
-import MovieForm from './MovieForm'
 import Settings from './Settings'
 
 const notify = (msg: string) => toast(msg)
@@ -73,7 +73,7 @@ export default function App() {
       <div className={styles.container}>
         <Toaster />
         {showForm ? (
-          <MovieForm onSubmit={addMovie} close={() => setShowForm(false)} />
+          <AddMoviePage addMovie={addMovie} close={() => setShowForm(false)} />
         ) : (
           <>
             <h1 className={styles.title}>
