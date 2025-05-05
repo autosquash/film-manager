@@ -14,21 +14,30 @@ const colors = [
 
 interface Props {
   movies: readonly Movie[]
-  showForm: () => void
+  displayAddMovieForm: () => void
+  displayEditMovieForm: (movie: Movie) => void
 }
 
-export default function MainPage({ movies, showForm }: Props) {
+export default function MainPage({
+  movies,
+  displayAddMovieForm,
+  displayEditMovieForm,
+}: Props) {
   const { t } = useTranslation()
   return (
     <>
       <h1 className={styles.title}>
         {t('mainTitle', { numberOfMovies: movies.length })}
       </h1>
-      <button onClick={showForm}>{t('addMovie')}</button>
+      <button onClick={displayAddMovieForm}>{t('addMovie')}</button>
       <ul className={styles.moviesList}>
         {movies.map((movie, index) => (
           <li key={movie.id}>
-            <Card movie={movie} color={colors[index % colors.length]} />
+            <Card
+              movie={movie}
+              color={colors[index % colors.length]}
+              edit={() => displayEditMovieForm(movie)}
+            />
           </li>
         ))}
       </ul>

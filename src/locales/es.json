@@ -2,7 +2,9 @@
     "mainTitle": "Hemos visto al menos {{numberOfMovies}} películas",
     "addMovie": "Añadir película",
     "submitMovie": "Agregar película",
+    "submitMovieUpdate": "Actualizar película",
     "movieAdded": "La película se añadió correctamente",
+    "movieUpdated": "La película se actualizó correctamente",
     "updateFailed": "Hubo un error y las películas no se guardaron correctamente",
     "settings": "Ajustes",
     "imageNotAvailable": "Imagen no disponible",
@@ -17,5 +19,6 @@
     "savingError": "Error al guardar el archivo",
     "chooseLang": "Elige el idioma de la aplicación",
     "eng": "inglés",
-    "spa": "español"
+    "spa": "español",
+    "edit": "Editar"
 }

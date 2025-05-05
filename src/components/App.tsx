@@ -6,6 +6,7 @@ import styles from '../css/App.module.css'
 import { Movie } from '../utils/model'
 import repository from '../utils/repository'
 import AddMoviePage from './AddMoviePage'
+import EditMoviePage from './EditMoviePage'
 import MainPage from './MainPage'
 import Settings from './Settings'
 
@@ -15,6 +16,8 @@ type MoviesState = Readonly<{
   movies: readonly Movie[]
 }>
 
+type FormKind = 'add' | 'edit' | null
+
 export default function App() {
   const { t } = useTranslation()
 
@@ -22,21 +25,21 @@ export default function App() {
   const [moviesState, setMoviesState] = useState<MoviesState>({
     movies: [],
   })
-  const [showForm, setShowForm] = useState(false)
+  const [formKind, setFormKind] = useState<FormKind>(null)
+  const [selected, setSelected] = useState<Movie | null>(null)
 
   useEffect(() => {
     repository.getMovies().then((fetchedMovies) => {
       setMoviesState({ movies: fetchedMovies })
     })
   }, [])
-
-  const addMovie = (newMovie: Movie) => {
-    const newMovies = [...moviesState.movies, newMovie]
-
-    setShowForm(false)
+  useEffect(() => {
+    if (moviesState.movies.length === 0) {
+      return
+    }
     const saveMovies = async () => {
       try {
-        await repository.saveMovies(newMovies)
+        await repository.saveMovies(moviesState.movies)
       } catch (err) {
         console.error(err)
         toast.error(t('updateFailed'), {
@@ -44,6 +47,28 @@ export default function App() {
         })
         return
       }
+    }
+    saveMovies()
+  }, [moviesState.movies])
+
+  const updateMovie = (edited: Movie) => {
+    const newMovies = moviesState.movies.map((movie) => {
+      if (movie.id === edited.id) {
+        return edited
+      }
+      return movie
+    })
+    setFormKind(null)
+    const saveMovies = async () => {
+      setMoviesState({ movies: newMovies })
+      notify(t('movieUpdated'))
+    }
+    saveMovies()
+  }
+  const addMovie = (newMovie: Movie) => {
+    const newMovies = [...moviesState.movies, newMovie]
+    setFormKind(null)
+    const saveMovies = async () => {
       setMoviesState({ movies: newMovies })
       notify(t('movieAdded'))
     }
@@ -60,18 +85,35 @@ export default function App() {
     )
   }
 
-  const displayForm = () => setShowForm(true)
-  const closeForm = () => setShowForm(false)
+  const displayAddMovieForm = () => setFormKind('add')
+  const displayEditMovieForm = (movie: Movie) => {
+    setSelected(movie)
+    setFormKind('edit')
+  }
+  const closeForm = () => setFormKind(null)
   const displaySettings = () => setShowSettings(true)
 
   return (
     <div>
       <div className={styles.container}>
         <Toaster />
-        {showForm ? (
+        {formKind === 'add' ? (
           <AddMoviePage addMovie={addMovie} close={closeForm} />
+        ) : formKind === 'edit' && selected ? (
+          <EditMoviePage
+            updateMovie={updateMovie}
+            close={() => {
+              closeForm()
+              setSelected(null)
+            }}
+            movie={selected}
+          />
         ) : (
-          <MainPage movies={moviesState.movies} showForm={displayForm} />
+          <MainPage
+            movies={moviesState.movies}
+            displayAddMovieForm={displayAddMovieForm}
+            displayEditMovieForm={displayEditMovieForm}
+          />
         )}
       </div>
       <div style={{ padding: 20 }} onClick={displaySettings}>

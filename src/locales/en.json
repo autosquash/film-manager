@@ -2,7 +2,9 @@
     "mainTitle": "We have watched at least {{numberOfMovies}} movies",
     "addMovie": "Add movie",
     "submitMovie": "Add movie",
+    "submitMovieUpdate": "Update movie",
     "movieAdded": "The movie was added successfully",
+    "movieUpdated": "The movie was updated successfully",
     "updateFailed": "There was an error and the movies were not saved correctly",
     "settings": "Settings",
     "imageNotAvailable": "Image not available",
@@ -17,5 +19,6 @@
     "savingError": "Error saving file",
     "chooseLang": "Choose the app language",
     "eng": "English",
-    "spa": "Spanish"
+    "spa": "Spanish",
+    "edit": "Edit"
 }

@@ -7,21 +7,23 @@ import { normalizeDate } from '../utils/dateProcessing'
 import { Title, type Movie } from '../utils/model'
 import ImageLoader, { FileData } from './ImageLoader'
 
-type MovieInputState = Readonly<{
+export type MovieInputState = Readonly<{
   title: string
   viewDate: string
   premiereDate: string
   imageURL: string
+  id: string | null
 }>
 
 interface Props {
   onSubmit: (newMovie: Movie) => void
   close: () => void
+  initialMovieState: MovieInputState
 }
 
-const MovieForm = ({ onSubmit, close }: Props) => {
+const MovieForm = ({ onSubmit, close, initialMovieState }: Props) => {
   const { t } = useTranslation()
-  const [movie, setMovie] = useState<MovieInputState>(createInitialMovieState())
+  const [movie, setMovie] = useState<MovieInputState>(initialMovieState)
   const [titleError, setTitleError] = useState('')
   const [dateError, setDateError] = useState('')
   const [imageFileData, setImageFileData] = useState<FileData | null>(null)
@@ -90,14 +92,14 @@ const MovieForm = ({ onSubmit, close }: Props) => {
     }
 
     onSubmit({
-      id: uuidv4(),
+      id: movie.id || uuidv4(),
       title: movieTitle,
       viewDate,
       premiereDate,
-      imageURL: imageURL,
+      imageURL,
       movieURL: null,
     })
-    setMovie(createInitialMovieState())
+    setMovie(initialMovieState)
   }
 
   const errorToDisplay = titleError || dateError
@@ -141,7 +143,9 @@ const MovieForm = ({ onSubmit, close }: Props) => {
       />
 
       {errorToDisplay && <p className={styles.error}>{errorToDisplay}</p>}
-      <button type="submit">{t('submitMovie')}</button>
+      <button type="submit">
+        {movie.id ? t('submitMovieUpdate') : t('submitMovie')}
+      </button>
       <button onClick={close} style={{ backgroundColor: 'darkred' }}>
         {t('cancel')}
       </button>
@@ -150,13 +154,6 @@ const MovieForm = ({ onSubmit, close }: Props) => {
 }
 
 // Module scope functions
-
-const createInitialMovieState = () => ({
-  title: '',
-  viewDate: '',
-  premiereDate: '',
-  imageURL: '',
-})
 
 const validateDate = (date: string) => {
   return /^\d{1,2}-\d{1,2}-\d{2,4}$/.test(date)

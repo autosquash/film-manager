@@ -7,5 +7,19 @@ interface Props {
 }
 
 export default function AddMoviePage({ addMovie, close }: Props) {
-  return <MovieForm onSubmit={addMovie} close={close} />
+  return (
+    <MovieForm
+      onSubmit={addMovie}
+      close={close}
+      initialMovieState={createInitialMovieState()}
+    />
+  )
 }
+
+const createInitialMovieState = () => ({
+  id: null,
+  title: '',
+  viewDate: '',
+  premiereDate: '',
+  imageURL: '',
+})

@@ -6,9 +6,10 @@ import type { Movie } from '../utils/model'
 interface Props {
   movie: Movie
   color: string
+  edit: () => void
 }
 
-export default function Card({ movie, color }: Props) {
+export default function Card({ movie, color, edit }: Props) {
   const { t } = useTranslation()
   const [open, setOpen] = useState(false)
 
@@ -61,6 +62,10 @@ export default function Card({ movie, color }: Props) {
               {premiereDateString}
             </p>
           )}
+          <div className={styles.buttonContainer}>
+            {' '}
+            <button onClick={edit}>{t('edit')}</button>
+          </div>
         </div>
       ) : null}
     </div>
