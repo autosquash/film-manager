@@ -87,8 +87,6 @@ const MovieForm = ({ onSubmit, close, initialMovieState }: Props) => {
       return
     }
 
-    const viewDate = normalizeDate(movie.viewDate)
-    const premiereDate = normalizeDate(movie.premiereDate)
     let imageURL: string | null = movie.imageURL
 
     if (imageFileData) {
@@ -98,8 +96,8 @@ const MovieForm = ({ onSubmit, close, initialMovieState }: Props) => {
     onSubmit({
       id: movie.id || uuidv4(),
       title: movieTitle,
-      viewDate,
-      premiereDate,
+      viewDate: normalizeDate(movie.viewDate),
+      premiereDate: normalizeDate(movie.premiereDate),
       imageURL,
       movieURL: movie.movieURL || null,
     })
