@@ -1,4 +1,6 @@
-export function normalizeDate(date: string): string | null {
+import { DateString } from './model'
+
+export function normalizeDate(date: string): DateString | null {
   if (!date) {
     return null
   }
@@ -31,5 +33,5 @@ export function normalizeDate(date: string): string | null {
   if (parseInt(day) > 31 || parseInt(month) > 12) {
     throw new Error('Invalid value for date')
   }
-  return [year, month, day].join('-')
+  return new DateString([year, month, day].join('-'))
 }

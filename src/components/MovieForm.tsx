@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { v4 as uuidv4 } from 'uuid'
 import styles from '../css/MovieForm.module.css'
 import { normalizeDate } from '../utils/dateProcessing'
-import { DateString, Title, type Movie } from '../utils/model'
+import { Title, type Movie } from '../utils/model'
 import ImageLoader, { FileData } from './ImageLoader'
 
 type MovieInputState = Readonly<{
@@ -79,8 +79,8 @@ const MovieForm = ({ onSubmit, close }: Props) => {
         return
       }
     }
-    const viewDate = movie.viewDate && normalizeDate(movie.viewDate)
-    const premiereDate = movie.premiereDate && normalizeDate(movie.premiereDate)
+    const viewDate = normalizeDate(movie.viewDate)
+    const premiereDate = normalizeDate(movie.premiereDate)
     let imageURL: string | null = movie.imageURL
 
     if (imageFileData) {
@@ -90,8 +90,8 @@ const MovieForm = ({ onSubmit, close }: Props) => {
     onSubmit({
       id: uuidv4(),
       title: movieTitle,
-      viewDate: viewDate ? new DateString(viewDate) : null,
-      premiereDate: premiereDate ? new DateString(premiereDate) : null,
+      viewDate,
+      premiereDate,
       imageURL: imageURL,
       movieURL: null,
     })

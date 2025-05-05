@@ -2,21 +2,24 @@ import { describe, expect, it } from 'vitest'
 import { normalizeDate } from '../utils/dateProcessing'
 
 describe('normalizeDate', () => {
+  ///// It should be successful /////
   it('returns null for empty input', () => {
     expect(normalizeDate('')).toBeNull()
   })
 
   it('normalizes date with full format', () => {
-    expect(normalizeDate('01-02-2024')).toBe('2024-02-01')
+    expect(normalizeDate('01-02-2024')?.value).toBe('2024-02-01')
   })
 
   it('adds leading zero to day and month', () => {
-    expect(normalizeDate('1-2-2024')).toBe('2024-02-01')
+    expect(normalizeDate('1-2-2024')?.value).toBe('2024-02-01')
   })
 
   it('converts 2-digit year to 4-digit', () => {
-    expect(normalizeDate('5-6-23')).toBe('2023-06-05')
+    expect(normalizeDate('5-6-23')?.value).toBe('2023-06-05')
   })
+
+  ///// It should throw an error /////
 
   it('throws error on wrong number of segments', () => {
     expect(() => normalizeDate('01-02')).toThrow('Wrong length')
