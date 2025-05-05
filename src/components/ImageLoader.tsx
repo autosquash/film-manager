@@ -32,14 +32,7 @@ function ImageLoader({ onSave }: Props) {
     if (!selectedFile) return
 
     try {
-      // 1) Convert the File to an ArrayBuffer
-      const arrayBuffer = await selectedFile.arrayBuffer()
-
-      // 2) Convert to Uint8Array to be able to transform it into a regular array
-      const uint8Array = new Uint8Array(arrayBuffer)
-
-      // 3) Convert it to an array of bytes (numbers)
-      const fileBytes = Array.from(uint8Array)
+      const fileBytes = await fileToBytes(selectedFile)
 
       if (!selectedFile.name.includes('.')) {
         return
@@ -72,6 +65,18 @@ function ImageLoader({ onSave }: Props) {
 const getImagePreview = (selectedFile: File | null): string | null => {
   if (!selectedFile) return null
   return URL.createObjectURL(selectedFile)
+}
+
+async function fileToBytes(selectedFile: File): Promise<number[]> {
+  // Convert the File to an ArrayBuffer
+  const arrayBuffer = await selectedFile.arrayBuffer()
+
+  // Convert to Uint8Array to be able to transform it into a regular array
+  const uint8Array = new Uint8Array(arrayBuffer)
+
+  // Convert it to an array of bytes (numbers)
+  const fileBytes = Array.from(uint8Array)
+  return fileBytes
 }
 
 export default ImageLoader
