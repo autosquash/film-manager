@@ -18,6 +18,7 @@ export default function EditMoviePage({ updateMovie, close, movie }: Props) {
         viewDate: movie.viewDate?.simpleFormat() || '',
         premiereDate: movie.premiereDate?.simpleFormat() || '',
         imageURL: movie.imageURL || '',
+        movieURL: movie.movieURL || '',
       }}
     />
   )

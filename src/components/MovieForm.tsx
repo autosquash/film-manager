@@ -12,6 +12,7 @@ export type MovieInputState = Readonly<{
   viewDate: string
   premiereDate: string
   imageURL: string
+  movieURL: string
   id: string | null
 }>
 
@@ -55,6 +56,9 @@ const MovieForm = ({ onSubmit, close, initialMovieState }: Props) => {
       case 'premiere_date':
         field = 'premiereDate'
         break
+      case 'movie_url':
+        field = 'movieURL'
+        break
       default:
         break
     }
@@ -97,7 +101,7 @@ const MovieForm = ({ onSubmit, close, initialMovieState }: Props) => {
       viewDate,
       premiereDate,
       imageURL,
-      movieURL: null,
+      movieURL: movie.movieURL || null,
     })
     setMovie(initialMovieState)
   }

@@ -1,5 +1,5 @@
 import type { Movie } from '../utils/model'
-import MovieForm from './MovieForm'
+import MovieForm, { MovieInputState } from './MovieForm'
 
 interface Props {
   addMovie: (newMovie: Movie) => void
@@ -16,10 +16,11 @@ export default function AddMoviePage({ addMovie, close }: Props) {
   )
 }
 
-const createInitialMovieState = () => ({
+const createInitialMovieState = (): MovieInputState => ({
   id: null,
   title: '',
   viewDate: '',
   premiereDate: '',
   imageURL: '',
+  movieURL: '',
 })
