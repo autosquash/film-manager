@@ -6,19 +6,10 @@ import styles from '../css/App.module.css'
 import { Movie } from '../utils/model'
 import repository from '../utils/repository'
 import AddMoviePage from './AddMoviePage'
-import Card from './Card'
+import MainPage from './MainPage'
 import Settings from './Settings'
 
 const notify = (msg: string) => toast(msg)
-
-const colors = [
-  'orange',
-  'MediumOrchid',
-  'LawnGreen',
-  'Peru',
-  'coral',
-  'LightSeaGreen',
-]
 
 type MoviesState = Readonly<{
   movies: readonly Movie[]
@@ -27,7 +18,7 @@ type MoviesState = Readonly<{
 export default function App() {
   const { t } = useTranslation()
 
-  const [displaySettings, setDisplaySettings] = useState(false)
+  const [showSettings, setShowSettings] = useState(false)
   const [moviesState, setMoviesState] = useState<MoviesState>({
     movies: [],
   })
@@ -59,40 +50,31 @@ export default function App() {
     saveMovies()
   }
 
-  if (displaySettings) {
+  if (showSettings) {
+    const closeSettings = () => setShowSettings(false)
     return (
       <div className={styles.container}>
         {' '}
-        <Settings close={() => setDisplaySettings(false)} />
+        <Settings close={closeSettings} />
       </div>
     )
   }
+
+  const displayForm = () => setShowForm(true)
+  const closeForm = () => setShowForm(false)
+  const displaySettings = () => setShowSettings(true)
 
   return (
     <div>
       <div className={styles.container}>
         <Toaster />
         {showForm ? (
-          <AddMoviePage addMovie={addMovie} close={() => setShowForm(false)} />
+          <AddMoviePage addMovie={addMovie} close={closeForm} />
         ) : (
-          <>
-            <h1 className={styles.title}>
-              {t('mainTitle', { numberOfMovies: moviesState.movies.length })}
-            </h1>
-            <button onClick={() => setShowForm(!showForm)}>
-              {t('addMovie')}
-            </button>
-            <ul className={styles.moviesList}>
-              {moviesState.movies.map((movie, index) => (
-                <li key={movie.id}>
-                  <Card movie={movie} color={colors[index % colors.length]} />
-                </li>
-              ))}
-            </ul>
-          </>
+          <MainPage movies={moviesState.movies} showForm={displayForm} />
         )}
       </div>
-      <div style={{ padding: 20 }} onClick={() => setDisplaySettings(true)}>
+      <div style={{ padding: 20 }} onClick={displaySettings}>
         {t('settings')}
       </div>
     </div>
