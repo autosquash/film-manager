@@ -10,11 +10,9 @@ export default function LanguageSwitcher({ close }: Props) {
 
   const switchToSpanish = () => {
     i18n.changeLanguage('es')
-    close()
   }
   const switchToEnglish = () => {
     i18n.changeLanguage('en')
-    close()
   }
   return (
     <div className={styles.container}>
@@ -27,6 +25,9 @@ export default function LanguageSwitcher({ close }: Props) {
           {t('eng')}
         </button>
       </div>
+      <button className={styles.button} onClick={close}>
+        {t('back')}
+      </button>
     </div>
   )
 }
