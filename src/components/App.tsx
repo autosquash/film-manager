@@ -1,3 +1,4 @@
+import { getCurrentWindow } from '@tauri-apps/api/window'
 import { useEffect, useState } from 'react'
 import toast, { Toaster } from 'react-hot-toast'
 import { useTranslation } from 'react-i18next'
@@ -29,6 +30,11 @@ export default function App() {
   const [selected, setSelected] = useState<Movie | null>(null)
 
   useEffect(() => {
+    const title = 'Gestor de películas'
+    const w = getCurrentWindow()
+
+    console.log('hola')
+    w.setTitle(title)
     repository.getMovies().then((fetchedMovies) => {
       setMoviesState({ movies: fetchedMovies })
     })
