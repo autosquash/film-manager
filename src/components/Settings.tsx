@@ -17,16 +17,9 @@ export default function LanguageSwitcher({ close }: Props) {
     close()
   }
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        padding: 100,
-      }}
-    >
+    <div className={styles.container}>
       <h3>{t('chooseLang')}</h3>
-      <div className={styles.container}>
+      <div className={styles.buttonsContainer}>
         <button className={styles.button} onClick={switchToSpanish}>
           {t('spa')}
         </button>
