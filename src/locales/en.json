@@ -23,5 +23,6 @@
     "edit": "Edit",
     "close": "Close",
     "appTitle": "Movies Manager",
-    "back": "Back"
+    "back": "Back",
+    "movieURL": "Web page"
 }

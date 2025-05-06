@@ -136,6 +136,15 @@ const MovieForm = ({ onSubmit, close, initialMovieState }: Props) => {
           onChange={handleChange}
         />
       </div>
+      <div className={styles.field}>
+        <label>{t('movieURL')}:</label>
+        <input
+          type="text"
+          name="movie_url"
+          value={movie.movieURL}
+          onChange={handleChange}
+        />
+      </div>
 
       <ImageLoader
         movieTitle={movie.title}
