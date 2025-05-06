@@ -16,9 +16,10 @@ export default function Card({ movie, color, edit }: Props) {
   const viewDateString = movie.viewDate?.simpleFormat()
   const premiereDateString = movie.premiereDate?.simpleFormat()
 
-  const isExpandable = Boolean(
-    movie.imageURL || viewDateString || premiereDateString
+  const thereIsMovieInfo = Boolean(
+    viewDateString || premiereDateString || movie.movieURL
   )
+  const isExpandable = Boolean(movie.imageURL || thereIsMovieInfo) && !open
   const cardClassNames = `${styles.movieCard} ${
     isExpandable ? styles.movieCardExpandable : ''
   }`
@@ -30,7 +31,7 @@ export default function Card({ movie, color, edit }: Props) {
     <div
       className={cardClassNames}
       style={cardStyle}
-      onClick={isExpandable ? () => setOpen(!open) : undefined}
+      onClick={isExpandable ? () => setOpen(true) : undefined}
     >
       <span>
         <strong>{movie.title.value}</strong>
@@ -50,21 +51,24 @@ export default function Card({ movie, color, edit }: Props) {
               </div>
             )}
           </>
-          <div className={styles.infoColumn}>
-            {viewDateString && (
-              <span>
-                <strong>{t('view')}: </strong>
-                {viewDateString}
-              </span>
-            )}
-            {premiereDateString && (
-              <span>
-                <strong>{t('premiere')}: </strong>
-                {premiereDateString}
-              </span>
-            )}
-            {movie.movieURL && <a href={`${movie.movieURL}`}>Web</a>}
-          </div>
+          {thereIsMovieInfo && (
+            <div className={styles.infoColumn}>
+              {viewDateString && (
+                <span>
+                  <strong>{t('view')}: </strong>
+                  {viewDateString}
+                </span>
+              )}
+              {premiereDateString && (
+                <span>
+                  <strong>{t('premiere')}: </strong>
+                  {premiereDateString}
+                </span>
+              )}
+              {movie.movieURL && <a href={`${movie.movieURL}`}>Web</a>}
+            </div>
+          )}
+
           <div className={styles.buttonContainer}>
             {' '}
             <button onClick={edit}>{t('edit')}</button>
