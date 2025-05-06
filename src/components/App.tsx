@@ -20,7 +20,7 @@ type MoviesState = Readonly<{
 type FormKind = 'add' | 'edit' | null
 
 export default function App() {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
 
   const [showSettings, setShowSettings] = useState(false)
   const [moviesState, setMoviesState] = useState<MoviesState>({
@@ -30,15 +30,16 @@ export default function App() {
   const [selected, setSelected] = useState<Movie | null>(null)
 
   useEffect(() => {
-    const title = 'Gestor de películas'
-    const w = getCurrentWindow()
+    const window = getCurrentWindow()
+    window.setTitle(t('appTitle'))
+  }, [i18n.language])
 
-    console.log('hola')
-    w.setTitle(title)
+  useEffect(() => {
     repository.getMovies().then((fetchedMovies) => {
       setMoviesState({ movies: fetchedMovies })
     })
   }, [])
+
   useEffect(() => {
     if (moviesState.movies.length === 0) {
       return
