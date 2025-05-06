@@ -28,11 +28,27 @@
     user-select: none;
 }
 
+.info-column {
+    margin-top: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: start;
+    background-color: #0001;
+    padding: 12px;
+    border-radius: 8px;
+    gap: 4px;
+}
+
 .button-container {
     display: flex;
     flex-direction: column;
     justify-content: center;
     gap: 12px;
+}
+
+.button-container>button {
+    font-size: 12px;
 }
 
 .close-button {

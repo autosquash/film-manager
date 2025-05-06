@@ -50,18 +50,21 @@ export default function Card({ movie, color, edit }: Props) {
               </p>
             )}
           </>
-          {viewDateString && (
-            <p>
-              <strong>{t('view')}: </strong>
-              {viewDateString}
-            </p>
-          )}
-          {premiereDateString && (
-            <p>
-              <strong>{t('premiere')}: </strong>
-              {premiereDateString}
-            </p>
-          )}
+          <div className={styles.infoColumn}>
+            {viewDateString && (
+              <span>
+                <strong>{t('view')}: </strong>
+                {viewDateString}
+              </span>
+            )}
+            {premiereDateString && (
+              <span>
+                <strong>{t('premiere')}: </strong>
+                {premiereDateString}
+              </span>
+            )}
+            {movie.movieURL && <a href={`${movie.movieURL}`}>Web</a>}
+          </div>
           <div className={styles.buttonContainer}>
             {' '}
             <button onClick={edit}>{t('edit')}</button>
