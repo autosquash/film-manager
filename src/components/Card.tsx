@@ -45,9 +45,9 @@ export default function Card({ movie, color, edit }: Props) {
                 className={styles.movieThumbnail}
               />
             ) : (
-              <p>
-                <em>{t('imageNotAvailable')}</em>
-              </p>
+              <div className={styles.imagePlaceholder}>
+                {t('imageNotAvailable')}
+              </div>
             )}
           </>
           <div className={styles.infoColumn}>
