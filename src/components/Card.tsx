@@ -19,10 +19,11 @@ export default function Card({ movie, color, edit }: Props) {
   const thereIsMovieInfo = Boolean(
     viewDateString || premiereDateString || movie.movieURL
   )
+  const isNotExpandable = !(movie.imageURL || thereIsMovieInfo)
   const isExpandable = Boolean(movie.imageURL || thereIsMovieInfo) && !open
   const cardClassNames = `${styles.movieCard} ${
     isExpandable ? styles.movieCardExpandable : ''
-  }`
+  } ${!open ? styles.movieCardClosed : ''}`
   const cardStyle = {
     '--background-color': color,
     cursor: isExpandable ? 'pointer' : 'default',
@@ -33,9 +34,24 @@ export default function Card({ movie, color, edit }: Props) {
       style={cardStyle}
       onClick={isExpandable ? () => setOpen(true) : undefined}
     >
-      <span>
-        <strong>{movie.title.value}</strong>
-      </span>
+      <div>
+        <span>
+          <strong>{movie.title.value}</strong>
+        </span>
+        {isNotExpandable && (
+          <button
+            style={{
+              position: 'absolute',
+              right: 20,
+              fontSize: 12,
+              padding: 4,
+            }}
+            onClick={edit}
+          >
+            {t('edit')}
+          </button>
+        )}
+      </div>
       {open ? (
         <div className={styles.content}>
           <>

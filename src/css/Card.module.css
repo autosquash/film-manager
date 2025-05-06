@@ -8,6 +8,10 @@
     outline: 2px solid transparent;
 }
 
+.movie-card-closed {
+    position: relative
+}
+
 .movie-card-expandable:hover {
     opacity: 0.9;
     outline: 2px solid var(--background-color);
