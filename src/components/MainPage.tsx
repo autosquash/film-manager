@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import styles from '../css/App.module.css'
-import { Movie } from '../utils/model'
+import type { Movie } from '../utils/model'
 import Card from './Card'
 
 const colors = [

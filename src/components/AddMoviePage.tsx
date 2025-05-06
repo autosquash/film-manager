@@ -1,5 +1,5 @@
 import type { Movie } from '../utils/model'
-import MovieForm, { MovieInputState } from './MovieForm'
+import MovieForm, { type MovieInputState } from './MovieForm'
 
 interface Props {
   addMovie: (newMovie: Movie) => void
