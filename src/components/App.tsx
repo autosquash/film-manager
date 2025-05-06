@@ -102,6 +102,17 @@ export default function App() {
 
   return (
     <div>
+      <div
+        style={{
+          position: 'absolute',
+          right: 0,
+          padding: 20,
+        }}
+      >
+        <button style={{ fontSize: 12 }} onClick={displaySettings}>
+          {t('settings')}
+        </button>
+      </div>
       <div className={styles.container}>
         <Toaster />
         {formKind === 'add' ? (
@@ -122,9 +133,6 @@ export default function App() {
             displayEditMovieForm={displayEditMovieForm}
           />
         )}
-      </div>
-      <div style={{ padding: 20 }} onClick={displaySettings}>
-        {t('settings')}
       </div>
     </div>
   )
